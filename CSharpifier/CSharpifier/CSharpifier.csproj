@@ -9,4 +9,12 @@
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CPPWithCXParser\" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(SolutionDir)prebuild.ps1 -SolutionDir $(SolutionDir)" />
+  </Target>
+
 </Project>
