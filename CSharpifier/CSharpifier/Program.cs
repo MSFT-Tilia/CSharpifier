@@ -9,7 +9,7 @@ namespace CSharpifier
         static void Main(string[] args)
         {
             TestSimpleCPP();
-            //TestAppXamlCPP();
+            TestAppXamlCPP();
         }
 
         static void TestSimpleCPP()
@@ -23,6 +23,8 @@ namespace CSharpifier
                 CPPCXParser parser = new CPPCXParser(tokens);
 
                 var tu = parser.translationUnit();
+
+                var tree = tu.ToStringTree();
             }
         }
 
@@ -36,7 +38,9 @@ namespace CSharpifier
 
                 CPPCXParser parser = new CPPCXParser(tokens);
 
+
                 var tu = parser.translationUnit();
+
             }
         }
     }

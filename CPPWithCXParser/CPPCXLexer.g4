@@ -65,6 +65,8 @@ Const_cast: 'const_cast';
 
 Continue: 'continue';
 
+CoAwait: 'co_await';
+
 Decltype: 'decltype';
 
 Default: 'default';

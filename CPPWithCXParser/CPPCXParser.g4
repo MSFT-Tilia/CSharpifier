@@ -201,9 +201,10 @@ conditionalExpression:
 	)?;
 
 assignmentExpression:
+	CoAwait? (
 	conditionalExpression
 	| logicalOrExpression assignmentOperator initializerClause
-	| throwExpression;
+	| throwExpression);
 
 assignmentOperator:
 	Assign
