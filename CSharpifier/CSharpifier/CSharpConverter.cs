@@ -14,6 +14,8 @@ namespace CSharpifier
         {
             _results = new StringBuilder();
             _line = new StringBuilder();
+            _lineStarted = false;
+            _indentation = 0;
         }
 
         public String Results
@@ -50,10 +52,14 @@ namespace CSharpifier
 
             LineAppendLeftBrace();
             ResultsAppendLine();
+
+            Indent();
         }
 
         public override void ExitNamespaceDefinition([NotNull] CPPCXParser.NamespaceDefinitionContext context)
         {
+            Outdent();
+
             LineAppendRightBrace();
             ResultsAppendLine();
         }
@@ -82,18 +88,51 @@ namespace CSharpifier
             return null;
         }
 
+        private void Indent()
+        {
+            ++_indentation;
+            LineClear();
+        }
+
+        private void Outdent()
+        {
+            --_indentation;
+
+            if(_indentation < 0)
+            {
+                // _indentation must never be negative.
+                throw new NotSupportedException();
+            }
+
+            LineClear();
+        }
+
+        private void MakeIndentations()
+        {
+            for(int i= 0; i < _indentation; ++i)
+            {
+                _line.Append(_indentSymbol);
+            }
+        }
+
         private void LineClear()
         {
             _line.Clear();
+            MakeIndentations();
+            _lineStarted = false;
         }
 
         private void LineAppendTerm(string term, bool forceNoSpace = false)
         {
             if(!string.IsNullOrEmpty(term))
             {
-                if(_line.Length > 0 && !forceNoSpace)
+                if(_lineStarted && !forceNoSpace)
                 {
                     _line.Append(" ");
+                }
+                else
+                {
+                    _lineStarted = true;
                 }
 
                 _line.Append(term);
@@ -132,6 +171,10 @@ namespace CSharpifier
         #endregion // string format helpers
 
         #region private members
+        // private readonly string _indentSymbol = "\t";  // indent using Tab
+        private readonly string _indentSymbol = "    ";   // indent using spaces
+        private bool _lineStarted;
+        private int _indentation;
         private StringBuilder _line;
         private StringBuilder _results;
         #endregion // private members
