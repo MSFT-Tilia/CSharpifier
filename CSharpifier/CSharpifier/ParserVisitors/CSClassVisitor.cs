@@ -1,6 +1,7 @@
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using System;
 
 namespace CSharpifier
 {
@@ -51,6 +52,73 @@ namespace CSharpifier
 
             return _class;
         }
+
+        public override CSClassNode VisitMemberdeclaration([NotNull] CPPCXParser.MemberdeclarationContext context)
+        {
+            if(context.ChildCount > 0)
+            {
+                var child = context.children[0];
+
+                if(child.GetType() == typeof(CPPCXParser.FunctionDefinitionContext))
+                { // function definition
+                    var functx = child as CPPCXParser.FunctionDefinitionContext;
+                    var node = new CSMethodNode();
+
+                    node.Name = functx.declarator().GetText();
+                    node.Access = _currentAccess;
+                    node.BodyCPPCX = functx.functionBody().GetText();
+
+                    if(functx.declSpecifierSeq() != null)
+                    {
+                        node.RetValType = Utils.DeclSpecifierSeqToString(functx.declSpecifierSeq());
+                    }
+
+                    _class.Children.Add(node);
+                }
+                else if(child.GetType() == typeof(CPPCXParser.PropertyDefinitionContext))
+                { // property definition
+                    
+                }
+                else if(child.GetType() == typeof(CPPCXParser.AttributeSpecifierSeqContext) ||
+                    child.GetType() == typeof(CPPCXParser.DeclSpecifierSeqContext) ||
+                    child.GetType() == typeof(CPPCXParser.MemberDeclaratorListContext))
+                { // declaration
+                    var attributeSpecSeq = Utils.GetContextFirstChild<CPPCXParser.AttributeSpecifierSeqContext>(context);
+                    // TODO: handle attributeSpecSeq 
+
+                    string declSpecSeq = string.Empty;
+                    var declSpecSeqCtx = Utils.GetContextFirstChild<CPPCXParser.DeclSpecifierSeqContext>(context);
+                    if(declSpecSeqCtx != null)
+                    {
+                        declSpecSeq = Utils.DeclSpecifierSeqToString(declSpecSeqCtx);
+                    }
+
+                    var declaratorList = Utils.GetContextFirstChild<CPPCXParser.MemberDeclaratorListContext>(context);
+                    if(declaratorList != null)
+                    {
+                        foreach(var declchild in declaratorList.children)
+                        {
+                            var decl = declchild as CPPCXParser.MemberDeclaratorContext;
+                            string name = decl.GetText();
+
+                            if (name.Contains("(") && name.Contains(")"))
+                            {
+                                var node = new CSMethodNode();
+                                node.Name = name;
+                                node.RetValType = declSpecSeq;
+                                node.Access = _currentAccess;
+                                _class.Children.Add(node);
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+            return base.VisitMemberdeclaration(context);
+        }
+
 
         public override CSClassNode VisitAccessSpecifier([NotNull] CPPCXParser.AccessSpecifierContext context)
         {

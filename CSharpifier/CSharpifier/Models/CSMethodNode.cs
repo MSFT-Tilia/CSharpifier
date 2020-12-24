@@ -6,6 +6,11 @@ namespace CSharpifier
         {
             return CSNodeType.Method;
         }
+
+        public string RetValType;
+        public bool IsVirtual;
+        public AccessSpecifier Access;
+        public string BodyCPPCX;
     }
 }
 
