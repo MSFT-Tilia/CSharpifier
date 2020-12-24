@@ -39,6 +39,7 @@ idExpression: unqualifiedId | qualifiedId;
 
 unqualifiedId:
 	Identifier
+	| Typeid_
 	| operatorFunctionId
 	| conversionFunctionId
 	| literalOperatorId
