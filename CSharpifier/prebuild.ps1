@@ -24,6 +24,8 @@ xcopy "$OriginalParserPath\CPPCXLexer.cs" "$TargetParserPath\" /d /y
 xcopy "$OriginalParserPath\CPPCXParser.cs" "$TargetParserPath\" /d /y
 xcopy "$OriginalParserPath\CPPCXParserBaseListener.cs" "$TargetParserPath\" /d /y
 xcopy "$OriginalParserPath\CPPCXParserListener.cs" "$TargetParserPath\" /d /y
+xcopy "$OriginalParserPath\CPPCXParserBaseVisitor.cs" "$TargetParserPath\" /d /y
+xcopy "$OriginalParserPath\CPPCXParserVisitor.cs" "$TargetParserPath\" /d /y
 
 
 echo "[PreBuild Completed]"

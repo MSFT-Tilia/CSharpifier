@@ -65,14 +65,15 @@ namespace CSharpifier
         }
 
 
-        public override void EnterSimpleDeclaration([NotNull] CPPCXParser.SimpleDeclarationContext context)
+        public override void EnterUnqualifiedId([NotNull] CPPCXParser.UnqualifiedIdContext context)
         {
-            LineAppendTerm(InterpretDoubleColon(context.attributeSpecifierSeq()?.GetText()));
-            LineAppendTerm(InterpretDoubleColon(context.declSpecifierSeq()?.GetText()));
-            LineAppendTerm(context.initDeclaratorList()?.GetText());
-            ResultsAppendLine();
+            LineAppendTerm(context.GetText());
         }
 
+        public override void EnterNestedNameSpecifier([NotNull] CPPCXParser.NestedNameSpecifierContext context)
+        {
+            LineAppendTerm(InterpretDoubleColon(context.GetText()));
+        }
 
 
         #endregion // visitors
