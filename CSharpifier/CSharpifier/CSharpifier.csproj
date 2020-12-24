@@ -10,6 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Samples\**" />
+    <Compile Remove="Samples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="CPPWithCXParser\" />
   </ItemGroup>
 

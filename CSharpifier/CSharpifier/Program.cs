@@ -34,6 +34,9 @@ namespace CSharpifier
             CSharpFile file = new CSharpFile();
             file.Parse(@"..\..\..\Samples\App.xaml.h");
             //file.Parse(@"..\..\..\Samples\App.xaml.cpp");
+
+            CSharpGen gen = new CSharpGen();
+            gen.Generate(@"..\..\..\Samples\output\App.xaml.h.cs", file.RootNode, new CSharpEmitter());
         }
 
     }

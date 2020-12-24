@@ -5,6 +5,24 @@ namespace CSharpifier
 {
     public static class Utils
     {
+        public static string InterpretAccessSpecifier(AccessSpecifier acc)
+        {
+            switch(acc)
+            {
+                case AccessSpecifier.Public:
+                    return "public";
+                case AccessSpecifier.Internal:
+                    return "internal";
+                case AccessSpecifier.Protected:
+                    return "protected";
+                case AccessSpecifier.Private:
+                    return "private";
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         public static string InterpretDoubleColon(string origin)
         {
             if(!string.IsNullOrEmpty(origin))

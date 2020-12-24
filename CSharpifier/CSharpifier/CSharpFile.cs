@@ -16,7 +16,7 @@ namespace CSharpifier
             _resultNode = new CSFileNode();
         }
 
-        public CSFileNode Result
+        public CSFileNode RootNode
         {
             get
             {
@@ -39,9 +39,9 @@ namespace CSharpifier
 
                 CSFileVisitor fileVisitor = new CSFileVisitor();
                 fileVisitor.Visit(tu);
-                var csfile = fileVisitor.File;
+                _resultNode = fileVisitor.File;
 
-                string dump = Utils.DumpCSNode(csfile);
+                string dump = Utils.DumpCSNode(_resultNode);
             }
         }
 
