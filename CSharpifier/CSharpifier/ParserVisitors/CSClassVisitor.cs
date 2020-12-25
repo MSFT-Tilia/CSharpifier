@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CSharpifier
 {
-    public class CSClassVisitor : CPPCXParserBaseVisitor<CSClassNode>
+    public class CSClassVisitor : CSVisitorBase<CSClassNode>
     {
         public CSClassNode Class
         {
@@ -21,7 +21,8 @@ namespace CSharpifier
             get;set;
         }
 
-        public CSClassVisitor()
+        public CSClassVisitor(ICharStream inputStream, ITokenStream tokenStream)
+            : base(inputStream, tokenStream)
         {
             _class = new CSClassNode();
             _currentAccess = AccessSpecifier.Private;
@@ -29,7 +30,7 @@ namespace CSharpifier
 
         public override CSClassNode VisitClassSpecifier([NotNull] CPPCXParser.ClassSpecifierContext context)
         {
-            CSClassVisitor visitor = new CSClassVisitor();
+            CSClassVisitor visitor = new CSClassVisitor(InputStream, TokenStream);
             var node = visitor.Class;
 
             // class name
@@ -67,10 +68,8 @@ namespace CSharpifier
 
                     node.Name = functx.declarator().GetText();
                     node.Access = _currentAccess;
-                    node.BodyCPPCX = functx.functionBody().GetText();
 
-                    List<ParserRuleContent> body = new List<ParserRuleContent>();
-                    Utils.GetParserRuleText(ref body, functx.functionBody());
+                    Utils.GetParserRuleText(ref node.Body, functx.functionBody(), TokenStream);
 
                     if(functx.declSpecifierSeq() != null)
                     {

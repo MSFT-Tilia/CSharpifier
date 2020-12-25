@@ -4,7 +4,7 @@ using Antlr4.Runtime.Tree;
 
 namespace CSharpifier
 {
-    public class CSNamespaceVisitor : CPPCXParserBaseVisitor<CSNamespaceNode>
+    public class CSNamespaceVisitor : CSVisitorBase<CSNamespaceNode>
     {
         public CSNamespaceNode Namespace
         {
@@ -14,14 +14,15 @@ namespace CSharpifier
             }
         }
 
-        public CSNamespaceVisitor()
+        public CSNamespaceVisitor(ICharStream inputStream, ITokenStream tokenStream)
+            : base(inputStream, tokenStream)
         {
             _ns = new CSNamespaceNode();
         }
 
         public override CSNamespaceNode VisitNamespaceDefinition([NotNull] CPPCXParser.NamespaceDefinitionContext context)
         {
-            CSNamespaceVisitor visitor = new CSNamespaceVisitor();
+            CSNamespaceVisitor visitor = new CSNamespaceVisitor(InputStream, TokenStream);
             var node = visitor.Namespace;
             node.Name = context.qualifiednamespacespecifier().GetText();
 
@@ -33,7 +34,7 @@ namespace CSharpifier
 
         public override CSNamespaceNode VisitClassSpecifier([NotNull] CPPCXParser.ClassSpecifierContext context)
         {
-            CSClassVisitor visitor = new CSClassVisitor();
+            CSClassVisitor visitor = new CSClassVisitor(InputStream, TokenStream);
             var node = visitor.Class;
 
             // class name

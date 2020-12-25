@@ -21,12 +21,20 @@ namespace CalculatorApp
         
         public class SafeFrameWindowCreation
         {
-            public SafeFrameWindowCreation(_In_WindowFrameService^frameService,App^parent)
-            :m_frameService(frameService),m_frameOpenedInWindow(false),m_parent(parent){}
-            public void SetOperationSuccess(boolsuccess)
-            {m_frameOpenedInWindow=success;}
-            public ~SafeFrameWindowCreation()
-            {if(!m_frameOpenedInWindow){m_parent->RemoveWindowFromMap(m_frameService->GetViewId());}}
+            public SafeFrameWindowCreation(_In_WindowFrameService^frameService,App^parent) :
+            m_frameService ( frameService ) ,
+            m_frameOpenedInWindow ( false ) ,
+            m_parent ( parent ) {
+            }
+            
+            public void SetOperationSuccess(boolsuccess) {
+            }
+            
+            public ~SafeFrameWindowCreation() {
+                if ( ! m_frameOpenedInWindow ) {
+                }
+            }
+            
         }
         
         private concurrency::task<void> SetupJumpList();
@@ -37,4 +45,17 @@ namespace CalculatorApp
     }
     
 }
+
+
+^frameService);
+        private WindowFrameService ^GetWindowFromMap(intviewId);
+        private void RemoveWindowFromMap(intviewId);
+    }
+    
+}
+
+
+            }
+    
+    }
 

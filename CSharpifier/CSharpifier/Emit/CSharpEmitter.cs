@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -64,11 +65,11 @@ namespace CSharpifier
             LineAppendsTerm(node.RetValType);
             LineAppendsTerm(node.Name);
 
-            if(!string.IsNullOrEmpty(node.BodyCPPCX))
+            if(node.Body.Count > 0)   
             { // the method has definition
                 // TODO: use regex to interpret method's body
-                OutputAppendsLine(ostream);
-                LineAppendsTerm(node.BodyCPPCX);
+                //OutputAppendsLine(ostream);
+                HandleFunctionBody(ostream, node.Body);
             }
             else
             { // declaration only
@@ -81,6 +82,28 @@ namespace CSharpifier
 
         #region string format helpers
 
+        private void HandleFunctionBody(StreamWriter ostream, List<ParsedToken> tokens)
+        {
+            foreach(var token in tokens)
+            {
+                if(IsOutdentToken(token.Name))
+                {
+                    Outdent();
+                }
+
+                LineAppendsTerm(token.Name);
+
+                if(IsLineFeedToken(token.Name))
+                {
+                    OutputAppendsLine(ostream);
+                }
+
+                if(IsIndentToken(token.Name))
+                {
+                    Indent();
+                }
+            }
+        }
 
         private void Indent()
         {
@@ -156,10 +179,39 @@ namespace CSharpifier
             }
         }
 
+        private void FlushLine(StreamWriter ostream)
+        {
+            if(_line.Length > 0)
+            {
+                OutputAppendsTerms(ostream, _line);
+            }
+        }
+
+        private void OutputAppendsTerms(StreamWriter outputStream, StringBuilder terms)
+        {
+            outputStream.Write(terms.ToString());
+            LineClear();
+        }
+
         private void OutputAppendsLine(StreamWriter outputStream)
         {
             outputStream.WriteLine(_line.ToString());
             LineClear();
+        }
+
+        private bool IsLineFeedToken(string token)
+        {
+            return _lineFeedTokens.Contains(token);
+        }
+
+        private bool IsIndentToken(string token)
+        {
+            return _indentTokens.Contains(token);
+        }
+
+        private bool IsOutdentToken(string token)
+        {
+            return _outdentTokens.Contains(token);
         }
 
         #endregion // string format helpers
@@ -167,6 +219,18 @@ namespace CSharpifier
         #region private members
         // private readonly string _indentSymbol = "\t";  // indent using Tab
         private readonly string _indentSymbol = "    ";   // indent using spaces
+        private readonly HashSet<string> _lineFeedTokens = new HashSet<string>() {
+            ",", "{", "}", ":"
+        };
+
+        private readonly HashSet<string> _indentTokens = new HashSet<string>() {
+            "{",
+        };
+
+        private readonly HashSet<string> _outdentTokens = new HashSet<string>() {
+            "}",
+        };
+
         private bool _lineStarted;
         private int _indentation;
         private StringBuilder _line;

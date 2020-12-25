@@ -5,7 +5,7 @@ using Antlr4.Runtime.Tree;
 namespace CSharpifier
 {
 
-    public class CSFileVisitor : CPPCXParserBaseVisitor<CSFileNode>
+    public class CSFileVisitor : CSVisitorBase<CSFileNode>
     {
         public CSFileNode File
         {
@@ -15,14 +15,15 @@ namespace CSharpifier
             }
         }
 
-        public CSFileVisitor()
+        public CSFileVisitor(ICharStream inputStream, ITokenStream tokenStream)
+            : base(inputStream, tokenStream)
         {
             this._file = new CSFileNode();
         }
 
         public override CSFileNode VisitNamespaceDefinition([NotNull] CPPCXParser.NamespaceDefinitionContext context)
         {
-            CSNamespaceVisitor visitor = new CSNamespaceVisitor();
+            CSNamespaceVisitor visitor = new CSNamespaceVisitor(InputStream, TokenStream);
             var ns = visitor.Namespace;
             ns.Parent = _file;
             ns.Name = context.qualifiednamespacespecifier().GetText();

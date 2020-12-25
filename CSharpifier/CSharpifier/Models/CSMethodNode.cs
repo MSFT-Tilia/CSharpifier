@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CSharpifier
 {
     public class CSMethodNode : CSNode
@@ -6,8 +8,13 @@ namespace CSharpifier
         {
             get
             {
-                return !string.IsNullOrEmpty(BodyCPPCX);
+                return Body.Count > 0;
             }
+        }
+
+        public CSMethodNode()
+        {
+            Body = new List<ParsedToken>();
         }
 
         public override CSNodeType NodeType()
@@ -18,7 +25,7 @@ namespace CSharpifier
         public string RetValType;
         public bool IsVirtual;
         public AccessSpecifier Access;
-        public string BodyCPPCX;
+        public List<ParsedToken> Body;
     }
 }
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CSharpifier
 {
-    public struct ParserRuleContent
+    public struct ParsedToken
     {
         public string Name;
         public Type ContextType;
@@ -13,22 +13,22 @@ namespace CSharpifier
 
     public static class Utils
     {
-        public static void GetParserRuleText(ref List<ParserRuleContent> res, ParserRuleContext root)
+        public static void GetParserRuleText(ref List<ParsedToken> res, IParseTree node, ITokenStream tokenStream)
         {
-            if(root.GetType() == typeof(TerminalNodeImpl) || root.ChildCount == 0)
+            if(node.ChildCount == 0)
             {
-                res.Add(new ParserRuleContent()
+
+                res.Add(new ParsedToken()
                 {
-                    Name = root.GetText(),
-                    ContextType = root.GetType()
-                }); ;
+                    Name = tokenStream.GetText(node.SourceInterval),
+                    ContextType = node.GetType()
+                });
             }
-            else
+
+            for(int i = 0; i < node.ChildCount; ++i)
             {
-                foreach(var child in root.children)
-                {
-                    GetParserRuleText(ref res, child as ParserRuleContext);
-                }
+                var child = node.GetChild(i);
+                GetParserRuleText(ref res, child, tokenStream);
             }
         }
 

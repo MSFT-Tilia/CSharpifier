@@ -26,23 +26,20 @@ namespace CSharpifier
 
         public void Parse(string filename)
         {
-            using (FileStream fstr = new FileStream(filename, FileMode.Open, FileAccess.Read))
-            {
-                AntlrInputStream astr = new AntlrInputStream(fstr);
-                CPPCXLexer lexer = new CPPCXLexer(astr);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                CPPCXParser parser = new CPPCXParser(tokens);
+            ICharStream cstr = CharStreams.fromPath(filename);
 
-                parser.BuildParseTree = true;
-                
-                var tu = parser.translationUnit();
+            CPPCXLexer lexer = new CPPCXLexer(cstr);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            CPPCXParser parser = new CPPCXParser(tokens);
 
-                CSFileVisitor fileVisitor = new CSFileVisitor();
-                fileVisitor.Visit(tu);
-                _resultNode = fileVisitor.File;
+            parser.BuildParseTree = true;
+            var tu = parser.translationUnit();
 
-                string dump = Utils.DumpCSNode(_resultNode);
-            }
+            CSFileVisitor fileVisitor = new CSFileVisitor(cstr, tokens);
+            fileVisitor.Visit(tu);
+            _resultNode = fileVisitor.File;
+
+            string dump = Utils.DumpCSNode(_resultNode);
         }
 
 
