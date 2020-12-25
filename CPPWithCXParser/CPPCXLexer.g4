@@ -31,6 +31,9 @@ MultiLineMacro:
 	'#' (~[\n]*? '\\' '\r'? '\n')+ ~ [\n]+ -> channel (HIDDEN);
 
 Directive: '#' ~ [\n]* -> channel (HIDDEN);
+
+ParamPrompt: ('_In_'|'_Out'|'_InOut_') -> skip;
+
 /*Keywords*/
 
 Alignas: 'alignas';

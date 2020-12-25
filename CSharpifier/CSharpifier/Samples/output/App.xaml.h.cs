@@ -10,10 +10,10 @@ namespace CalculatorApp
         public App ()
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        internal void RemoveWindow ( _In_ WindowFrameService frameService )
+        internal void RemoveWindow ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        internal void RemoveSecondaryWindow ( _In_ WindowFrameService frameService )
+        internal void RemoveSecondaryWindow ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
         private static void SetMinWindowSizeAndActivate ( Windows . UI . Xaml . Controls . Frame rootFrame , Windows . Foundation . Size minWindowSize )
@@ -34,7 +34,7 @@ namespace CalculatorApp
         
         public class SafeFrameWindowCreation
         {
-            public SafeFrameWindowCreation(_In_WindowFrameService^frameService,App^parent) ()
+            public SafeFrameWindowCreation(WindowFrameService^frameService,App^parent) ()
             :
             m_frameService ( frameService ) ,
             m_frameOpenedInWindow ( false ) ,
@@ -59,15 +59,20 @@ namespace CalculatorApp
         private Task SetupJumpList ()
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        private Task HandleViewReleaseAndRemoveWindowFromMap ( _In_ WindowFrameService frameService )
+        private Task HandleViewReleaseAndRemoveWindowFromMap ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        private void AddWindowToMap ( _In_ WindowFrameService frameService )
+        private void AddWindowToMap ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
         private void RemoveWindowFromMap ( int viewId )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
+    }
+    
+}
+
+    
     }
     
 }
