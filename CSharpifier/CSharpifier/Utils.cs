@@ -8,7 +8,7 @@ namespace CSharpifier
     public struct ParsedToken
     {
         public string Name;
-        public Type ContextType;
+        public Type ParentContextType;
     }
 
     public static class Utils
@@ -17,11 +17,10 @@ namespace CSharpifier
         {
             if(node.ChildCount == 0)
             {
-
                 res.Add(new ParsedToken()
                 {
                     Name = tokenStream.GetText(node.SourceInterval),
-                    ContextType = node.GetType()
+                    ParentContextType = node.Parent?.GetType()
                 });
             }
 

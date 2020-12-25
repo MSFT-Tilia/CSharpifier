@@ -65,6 +65,15 @@ namespace CSharpifier
             LineAppendsTerm(node.RetValType);
             LineAppendsTerm(node.Name);
 
+            if(node.Parameters.Count > 0)
+            {
+                HandleFunctionParameters(ostream, node.Parameters);
+            }
+            else
+            {
+                LineAppendsTerm("()");
+            }
+
             if(node.Body.Count > 0)   
             { // the method has definition
                 // TODO: use regex to interpret method's body
@@ -83,6 +92,20 @@ namespace CSharpifier
 
 
         #region string format helpers
+
+        private void HandleFunctionParameters(StreamWriter ostream, List<ParsedToken> tokens)
+        {
+            LineAppendsLeftParen();
+            foreach(var token in tokens)
+            {
+                var destToken = InterpretToken(token.Name);
+                if(!string.IsNullOrEmpty(destToken))
+                {
+                    LineAppendsTerm(InterpretToken(token.Name));
+                }
+            }
+            LineAppendsRightParen();
+        }
 
         private void HandleFunctionBody(StreamWriter ostream, List<ParsedToken> tokens)
         {
@@ -158,6 +181,16 @@ namespace CSharpifier
             }
         }
 
+        private void LineAppendsLeftParen()
+        {
+            LineAppendsTerm("(");
+        }
+
+        private void LineAppendsRightParen()
+        {
+            LineAppendsTerm(")");
+        }
+
         private void LineAppendsLeftBrace()
         {
             LineAppendsTerm("{");
@@ -201,36 +234,70 @@ namespace CSharpifier
             LineClear();
         }
 
-        private bool IsLineFeedToken(string token)
+        private static bool IsLineFeedToken(string token)
         {
             return _lineFeedTokens.Contains(token);
         }
 
-        private bool IsIndentToken(string token)
+        private static bool IsIndentToken(string token)
         {
             return _indentTokens.Contains(token);
         }
 
-        private bool IsOutdentToken(string token)
+        private static bool IsOutdentToken(string token)
         {
             return _outdentTokens.Contains(token);
+        }
+
+        private static bool IsFwSpaceNeededToken(string token)
+        {
+            return _fwSpaceNeededTokens.Contains(token);
+        }
+        
+        private static bool IsBwSpaceNeededToken(string token)
+        {
+            return _bwSpaceNeededTokens.Contains(token);
+        }
+
+        private static string InterpretToken(string original)
+        {
+            string dest;
+            if(_tokenMappingCPPCX2CS.TryGetValue(original, out dest))
+            {
+                return dest;
+            }
+            else
+            {
+                return original;
+            }
         }
 
         #endregion // string format helpers
 
         #region private members
         // private readonly string _indentSymbol = "\t";  // indent using Tab
-        private readonly string _indentSymbol = "    ";   // indent using spaces
-        private readonly HashSet<string> _lineFeedTokens = new HashSet<string>() {
+        private static readonly string _indentSymbol = "    ";   // indent using spaces
+        private static readonly HashSet<string> _lineFeedTokens = new HashSet<string>() {
             ",", "{", "}", ":"
         };
 
-        private readonly HashSet<string> _indentTokens = new HashSet<string>() {
+        private static readonly HashSet<string> _indentTokens = new HashSet<string>() {
             "{",
         };
 
-        private readonly HashSet<string> _outdentTokens = new HashSet<string>() {
+        private static readonly HashSet<string> _outdentTokens = new HashSet<string>() {
             "}",
+        };
+
+        private static readonly HashSet<string> _fwSpaceNeededTokens = new HashSet<string>() {
+        };
+
+        private static readonly HashSet<string> _bwSpaceNeededTokens = new HashSet<string>() {
+            ",",
+        };
+
+        private static readonly Dictionary<string, string> _tokenMappingCPPCX2CS = new Dictionary<string, string>() {
+            {"::", "."}, {"^", ""}
         };
 
         private bool _lineStarted;

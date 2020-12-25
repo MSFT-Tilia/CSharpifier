@@ -3,6 +3,8 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace CSharpifier
 {
@@ -82,7 +84,7 @@ namespace CSharpifier
                 { // property definition
                     
                 }
-                else if(child.GetType() == typeof(CPPCXParser.AttributeSpecifierSeqContext) ||
+                else if (child.GetType() == typeof(CPPCXParser.AttributeSpecifierSeqContext) ||
                     child.GetType() == typeof(CPPCXParser.DeclSpecifierSeqContext) ||
                     child.GetType() == typeof(CPPCXParser.MemberDeclaratorListContext))
                 { // declaration
@@ -91,37 +93,41 @@ namespace CSharpifier
 
                     string declSpecSeq = string.Empty;
                     var declSpecSeqCtx = Utils.GetContextFirstChild<CPPCXParser.DeclSpecifierSeqContext>(context);
-                    if(declSpecSeqCtx != null)
+                    if (declSpecSeqCtx != null)
                     {
                         declSpecSeq = Utils.DeclSpecifierSeqToString(declSpecSeqCtx);
                     }
 
                     var declaratorList = Utils.GetContextFirstChild<CPPCXParser.MemberDeclaratorListContext>(context);
-                    if(declaratorList != null)
+                    if (declaratorList != null)
                     {
-                        foreach(var declchild in declaratorList.children)
+                        foreach (var declchild in declaratorList.children)
                         {
                             var decl = declchild as CPPCXParser.MemberDeclaratorContext;
-                            string name = decl.GetText();
 
-                            if (name.Contains("(") && name.Contains(")"))
+                            var text = decl.GetText();
+                            if(IsTheTextLooksLikeAFunction(text))
                             {
+                                List<ParsedToken> funcdeclTokens = new List<ParsedToken>();
+                                Utils.GetParserRuleText(ref funcdeclTokens, decl, TokenStream);
+
+                                Debug.Assert(funcdeclTokens.Count > 0);
+
                                 var node = new CSMethodNode();
-                                node.Name = name;
+                                node.Name = funcdeclTokens[0].Name;
                                 node.RetValType = declSpecSeq;
                                 node.Access = _currentAccess;
+                                FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
+
                                 _class.Children.Add(node);
                             }
                         }
                     }
-
-
                 }
             }
 
             return base.VisitMemberdeclaration(context);
         }
-
 
         public override CSClassNode VisitAccessSpecifier([NotNull] CPPCXParser.AccessSpecifierContext context)
         {
@@ -147,7 +153,34 @@ namespace CSharpifier
             return base.VisitAccessSpecifier(context);
         }
 
+        private static void FetchFunctionParameters(ref List<ParsedToken> paramList, List<ParsedToken> src)
+        {
+            int parenCount = 0;
+            foreach(var token in src)
+            {
+                if (token.Name == "(")
+                {
+                    ++parenCount;
+                }
+                else if(token.Name == ")")
+                {
+                    --parenCount;
+                    Debug.Assert(parenCount >= 0);
+                }
+                else if(parenCount > 0)
+                {
+                    paramList.Add(token);
+                }
+            }
+        }
+
+        private static bool IsTheTextLooksLikeAFunction(string text)
+        {
+            return _regexFunctionSignature.IsMatch(text);
+        }
+
         private AccessSpecifier _currentAccess;
         private CSClassNode _class;
+        private static readonly Regex _regexFunctionSignature = new Regex(@"^\w+\(.*\)$");
     }
 }

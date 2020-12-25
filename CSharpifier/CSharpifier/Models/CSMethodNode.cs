@@ -15,6 +15,8 @@ namespace CSharpifier
         public CSMethodNode()
         {
             Body = new List<ParsedToken>();
+            Parameters = new List<ParsedToken>();
+            BaseSpecifiers = new List<ParsedToken>();
         }
 
         public override CSNodeType NodeType()
@@ -25,6 +27,8 @@ namespace CSharpifier
         public string RetValType;
         public bool IsVirtual;
         public AccessSpecifier Access;
+        public List<ParsedToken> Parameters;
+        public List<ParsedToken> BaseSpecifiers;
         public List<ParsedToken> Body;
     }
 }
