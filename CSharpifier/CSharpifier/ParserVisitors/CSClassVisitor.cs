@@ -2,6 +2,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
+using System.Collections.Generic;
 
 namespace CSharpifier
 {
@@ -67,6 +68,9 @@ namespace CSharpifier
                     node.Name = functx.declarator().GetText();
                     node.Access = _currentAccess;
                     node.BodyCPPCX = functx.functionBody().GetText();
+
+                    List<ParserRuleContent> body = new List<ParserRuleContent>();
+                    Utils.GetParserRuleText(ref body, functx.functionBody());
 
                     if(functx.declSpecifierSeq() != null)
                     {

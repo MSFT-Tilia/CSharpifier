@@ -17,6 +17,7 @@ namespace CSharpifier
     public abstract class CSNode
     {
         public string Name = string.Empty;
+        public CSNode Parent = null;
         public List<CSNode> Children = new List<CSNode>();
 
         public virtual CSNodeType NodeType()

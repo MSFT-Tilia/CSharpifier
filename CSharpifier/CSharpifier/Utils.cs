@@ -1,10 +1,37 @@
+using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System;
+using System.Collections.Generic;
 
 namespace CSharpifier
 {
+    public struct ParserRuleContent
+    {
+        public string Name;
+        public Type ContextType;
+    }
+
     public static class Utils
     {
+        public static void GetParserRuleText(ref List<ParserRuleContent> res, ParserRuleContext root)
+        {
+            if(root.GetType() == typeof(TerminalNodeImpl) || root.ChildCount == 0)
+            {
+                res.Add(new ParserRuleContent()
+                {
+                    Name = root.GetText(),
+                    ContextType = root.GetType()
+                }); ;
+            }
+            else
+            {
+                foreach(var child in root.children)
+                {
+                    GetParserRuleText(ref res, child as ParserRuleContext);
+                }
+            }
+        }
+
         public static string InterpretAccessSpecifier(AccessSpecifier acc)
         {
             switch(acc)

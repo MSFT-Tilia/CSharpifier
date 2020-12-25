@@ -24,6 +24,7 @@ namespace CSharpifier
         {
             CSNamespaceVisitor visitor = new CSNamespaceVisitor();
             var ns = visitor.Namespace;
+            ns.Parent = _file;
             ns.Name = context.qualifiednamespacespecifier().GetText();
 
             visitor.Visit(context.namespaceBody);
