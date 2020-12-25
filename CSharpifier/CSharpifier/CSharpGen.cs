@@ -9,7 +9,7 @@ namespace CSharpifier
     {
         public void Generate(string filename, CSFileNode fileNode, CSharpEmitterBase emitter)
         {
-            using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write))
             {
                 StreamWriter sw = new StreamWriter(fs);
                 Generate(sw, fileNode, emitter);

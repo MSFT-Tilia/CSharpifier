@@ -72,8 +72,3 @@ namespace CalculatorApp
     
 }
 
-    
-    }
-    
-}
-
