@@ -34,25 +34,14 @@ namespace CalculatorApp
         
         public class SafeFrameWindowCreation
         {
-            public SafeFrameWindowCreation(WindowFrameService^frameService,App^parent) ()
-            :
-            m_frameService ( frameService ) ,
-            m_frameOpenedInWindow ( false ) ,
-            m_parent ( parent ) {
-            }
+            public SafeFrameWindowCreation ( WindowFrameService frameService , App parent )
+            { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
             
+            public void SetOperationSuccess ( bool success )
+            { m_frameOpenedInWindow = success ; }
             
-            public void SetOperationSuccess(boolsuccess) ()
-            {
-            }
-            
-            
-            public ~SafeFrameWindowCreation() ()
-            {
-                if ( ! m_frameOpenedInWindow ) {
-                }
-            }
-            
+            public ~SafeFrameWindowCreation ()
+            { if ( ! m_frameOpenedInWindow ) m_parent -> RemoveWindowFromMap ( m_frameService -> GetViewId ( ) ) ; }
             
         }
         

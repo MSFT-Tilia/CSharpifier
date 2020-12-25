@@ -68,10 +68,17 @@ namespace CSharpifier
                     var functx = child as CPPCXParser.FunctionDefinitionContext;
                     var node = new CSMethodNode();
 
-                    node.Name = functx.declarator().GetText();
-                    node.Access = _currentAccess;
+                    List<ParsedToken> funcdeclTokens = new List<ParsedToken>();
+                    Utils.GetParserRuleText(ref funcdeclTokens, functx.declarator(), TokenStream);
 
-                    Utils.GetParserRuleText(ref node.Body, functx.functionBody(), TokenStream);
+                    List<ParsedToken> funcbodyTokens = new List<ParsedToken>();
+                    Utils.GetParserRuleText(ref funcbodyTokens, functx.functionBody(), TokenStream);
+                    Debug.Assert(funcdeclTokens.Count > 0);
+
+                    node.Access = _currentAccess;
+                    FetchFunctionName(ref node.Name, funcdeclTokens);
+                    FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
+                    FetchFunctionBody(ref node.Body, funcbodyTokens);
 
                     if(functx.declSpecifierSeq() != null)
                     {
@@ -114,9 +121,9 @@ namespace CSharpifier
                                 Debug.Assert(funcdeclTokens.Count > 0);
 
                                 var node = new CSMethodNode();
-                                node.Name = funcdeclTokens[0].Name;
                                 node.RetValType = declSpecSeq;
                                 node.Access = _currentAccess;
+                                FetchFunctionName(ref node.Name, funcdeclTokens);
                                 FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
 
                                 _class.Children.Add(node);
@@ -153,6 +160,21 @@ namespace CSharpifier
             return base.VisitAccessSpecifier(context);
         }
 
+        private static void FetchFunctionName(ref string name, List<ParsedToken> src)
+        {
+            Debug.Assert(src.Count > 0 || src.Count > 1);
+
+            if(src[0].Name != "~")
+            { // normal function name
+                name = src[0].Name;
+            }
+            else
+            { // destructor name
+                Debug.Assert(src.Count > 1);
+                name = "~" + src[1].Name;
+            }
+        }
+
         private static void FetchFunctionParameters(ref List<ParsedToken> paramList, List<ParsedToken> src)
         {
             int parenCount = 0;
@@ -174,6 +196,27 @@ namespace CSharpifier
             }
         }
 
+        private static void FetchFunctionBody(ref List<ParsedToken> body, List<ParsedToken> src)
+        {
+            int braceCount = 0;
+            foreach(var token in src)
+            {
+                if (token.Name == "{")
+                {
+                    ++braceCount;
+                }
+                else if(token.Name == "}")
+                {
+                    --braceCount;
+                    Debug.Assert(braceCount >= 0);
+                }
+                else if(braceCount > 0)
+                {
+                    body.Add(token);
+                }
+            }
+        }
+
         private static bool IsTheTextLooksLikeAFunction(string text)
         {
             return _regexFunctionSignature.IsMatch(text);
@@ -181,6 +224,6 @@ namespace CSharpifier
 
         private AccessSpecifier _currentAccess;
         private CSClassNode _class;
-        private static readonly Regex _regexFunctionSignature = new Regex(@"^\w+\(.*\)$");
+        private static readonly Regex _regexFunctionSignature = new Regex(@"^~?\w+\(.*\)$");
     }
 }

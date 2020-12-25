@@ -136,6 +136,8 @@ namespace CSharpifier
 
         private void HandleFunctionBody(StreamWriter ostream, List<ParsedToken> tokens)
         {
+            LineAppendsLeftBrace();
+
             foreach(var token in tokens)
             {
                 if(IsOutdentToken(token.Name))
@@ -155,6 +157,8 @@ namespace CSharpifier
                     Indent();
                 }
             }
+
+            LineAppendsRightBrace();
         }
 
         private void Indent()
