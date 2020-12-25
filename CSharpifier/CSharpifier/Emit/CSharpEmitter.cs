@@ -62,7 +62,9 @@ namespace CSharpifier
         public override void OnEnterMethod(StreamWriter ostream, CSMethodNode node)
         {
             LineAppendsTerm(Utils.InterpretAccessSpecifier(node.Access));
-            LineAppendsTerm(node.RetValType);
+
+            HandleFunctionRetType(ostream, node.RetValType);
+
             LineAppendsTerm(node.Name);
 
             if(node.Parameters.Count > 0)
@@ -73,6 +75,8 @@ namespace CSharpifier
             {
                 LineAppendsTerm("()");
             }
+
+            OutputAppendsLine(ostream);
 
             if(node.Body.Count > 0)   
             { // the method has definition
@@ -90,8 +94,31 @@ namespace CSharpifier
             OutputAppendsLine(ostream);
         }
 
+        public override void OnExitMethod(StreamWriter ostream, CSMethodNode node)
+        {
+            OutputAppendsLine(ostream);
+        }
+
 
         #region string format helpers
+
+        private void HandleFunctionRetType(StreamWriter ostream, string rettype)
+        {
+            if(rettype != null)
+            {
+                foreach(var pair in _typeMappingCPPCX2CS)
+                {
+                    rettype = rettype.Replace(pair.Key, pair.Value);
+                }
+
+                foreach(var pair in _tokenMappingCPPCX2CS)
+                {
+                    rettype = rettype.Replace(pair.Key, pair.Value);
+                }
+
+                LineAppendsTerm(rettype);
+            }
+        }
 
         private void HandleFunctionParameters(StreamWriter ostream, List<ParsedToken> tokens)
         {
@@ -214,14 +241,6 @@ namespace CSharpifier
             }
         }
 
-        private void FlushLine(StreamWriter ostream)
-        {
-            if(_line.Length > 0)
-            {
-                OutputAppendsTerms(ostream, _line);
-            }
-        }
-
         private void OutputAppendsTerms(StreamWriter outputStream, StringBuilder terms)
         {
             outputStream.Write(terms.ToString());
@@ -247,16 +266,6 @@ namespace CSharpifier
         private static bool IsOutdentToken(string token)
         {
             return _outdentTokens.Contains(token);
-        }
-
-        private static bool IsFwSpaceNeededToken(string token)
-        {
-            return _fwSpaceNeededTokens.Contains(token);
-        }
-        
-        private static bool IsBwSpaceNeededToken(string token)
-        {
-            return _bwSpaceNeededTokens.Contains(token);
         }
 
         private static string InterpretToken(string original)
@@ -289,15 +298,12 @@ namespace CSharpifier
             "}",
         };
 
-        private static readonly HashSet<string> _fwSpaceNeededTokens = new HashSet<string>() {
-        };
-
-        private static readonly HashSet<string> _bwSpaceNeededTokens = new HashSet<string>() {
-            ",",
-        };
-
         private static readonly Dictionary<string, string> _tokenMappingCPPCX2CS = new Dictionary<string, string>() {
             {"::", "."}, {"^", ""}
+        };
+
+        private static readonly Dictionary<string, string> _typeMappingCPPCX2CS = new Dictionary<string, string>() {
+            {"concurrency::task<void>", "Task" }
         };
 
         private bool _lineStarted;
