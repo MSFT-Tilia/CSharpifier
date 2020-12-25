@@ -72,8 +72,10 @@ namespace CSharpifier
                 HandleFunctionBody(ostream, node.Body);
             }
             else
-            { // declaration only
-                LineAppendsSemi();
+            { // declaration only, put a default implementation
+                LineAppendsLeftBrace();
+                LineAppendsTerm("throw new NotImplementedException();");
+                LineAppendsRightBrace();
             }
 
             OutputAppendsLine(ostream);
