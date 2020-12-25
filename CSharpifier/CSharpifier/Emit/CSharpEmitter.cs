@@ -74,7 +74,7 @@ namespace CSharpifier
             else
             { // declaration only, put a default implementation
                 LineAppendsLeftBrace();
-                LineAppendsTerm("throw new NotImplementedException();");
+                LineAppendsTerm("throw new NotImplementedException(); /* CSharpifier Warning */");
                 LineAppendsRightBrace();
             }
 
