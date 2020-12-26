@@ -74,7 +74,7 @@ namespace CSharpifier
             var idExprCtx = Utils.GetContextFirstChildOffspring<CPPCXParser.IdExpressionContext>(context);
             Debug.Assert(idExprCtx != null);
 
-            node.Name += Utils.GetParserRuleText(idExprCtx, TokenStream);
+            node.Name = Utils.GetParserRuleText(idExprCtx, TokenStream);
 
             //Utils.FetchMemberName(ref node.Name, funcdeclTokens);
             //Utils.FetchFunctionParameters(ref node.Parameters, funcdeclTokens);

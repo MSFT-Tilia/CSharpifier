@@ -73,18 +73,44 @@ namespace CSharpifier
 
                     List<ParsedToken> funcbodyTokens = new List<ParsedToken>();
                     Utils.GetParserRuleText(ref funcbodyTokens, functx.functionBody(), TokenStream);
-                    Debug.Assert(funcdeclTokens.Count > 0);
+                    Debug.Assert(funcbodyTokens .Count > 0);
 
                     node.Access = _currentAccess;
-                    FetchMemberName(ref node.Name, funcdeclTokens);
+
+                    var idExprCtx = Utils.GetContextFirstChildOffspring<CPPCXParser.IdExpressionContext>(functx);
+                    Debug.Assert(idExprCtx != null);
+                    node.Name = Utils.GetParserRuleText(idExprCtx, TokenStream);
+
                     FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
                     FetchFunctionBody(ref node.Body, funcbodyTokens);
 
                     // TODO: fetch base-specifiers
 
-                    if(functx.declSpecifierSeq() != null)
+                    if (functx.declSpecifierSeq() != null)
                     {
-                        node.RetValType = Utils.GetParserRuleText(functx.declSpecifierSeq(), TokenStream);
+                        var declSpecifierList = new List<CPPCXParser.DeclSpecifierContext>();
+                        Utils.GetContextChildrenOffspring(ref declSpecifierList, functx.declSpecifierSeq());
+
+                        switch (declSpecifierList.Count)
+                        {
+                            case 0: // no return-value-type defined
+                                    // maybe a constructor or a destructor
+                                break;
+
+                            case 1:
+                                node.RetValType = Utils.GetParserRuleText(declSpecifierList[0], TokenStream);
+                                break;
+
+                            case 2:
+                                node.RetValType = Utils.GetParserRuleText(declSpecifierList[0], TokenStream);
+                                node.ParentType = Utils.GetParserRuleText(declSpecifierList[1], TokenStream); // prefix
+                                break;
+
+                            default:
+                                // what is this?
+                                Debug.Assert(false);
+                                break;
+                        }
                     }
 
                     _class.Children.Add(node);
