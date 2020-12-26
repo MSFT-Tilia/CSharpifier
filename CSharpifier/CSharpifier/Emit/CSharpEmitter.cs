@@ -66,7 +66,7 @@ namespace CSharpifier
 
             HandleFunctionRetType(ostream, node.RetValType);
 
-            LineAppendsTerm(node.Name);
+            HandleFunctionName(ostream, node.Name);
 
             if(node.Parameters.Count > 0)
             {
@@ -119,6 +119,11 @@ namespace CSharpifier
         {
             if(!string.IsNullOrEmpty(rettype))
             {
+                rettype = Utils.TrimAroundDot(
+                    Utils.TrimAroundDoubleColon(
+                        Utils.TrimAroundGreaterAndLess(
+                        rettype)));
+
                 foreach(var pair in _typeMappingCPPCX2CS)
                 {
                     rettype = rettype.Replace(pair.Key, pair.Value);
@@ -131,6 +136,11 @@ namespace CSharpifier
 
                 LineAppendsTerm(rettype);
             }
+        }
+
+        private void HandleFunctionName(StreamWriter ostream, string name)
+        {
+            HandleFieldName(ostream, name);
         }
 
         private void HandleFieldRetType(StreamWriter ostream, string rettype)

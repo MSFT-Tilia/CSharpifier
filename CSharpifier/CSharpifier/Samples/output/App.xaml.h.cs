@@ -19,7 +19,7 @@ namespace CalculatorApp
         internal void RemoveSecondaryWindow ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        private static Windows . UI . Xaml . Controls . Frame ^ CreateFrame ()
+        private static Windows.UI.Xaml.Controls.Frame  CreateFrame ()
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
         private static void SetMinWindowSizeAndActivate ( Windows.UI.Xaml.Controls.Frame rootFrame , Windows.Foundation.Size minWindowSize )
@@ -54,16 +54,16 @@ namespace CalculatorApp
             private App  m_parent;
         }
         
-        private concurrency . task < void > SetupJumpList ()
+        private Task SetupJumpList ()
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        private concurrency . task < void > HandleViewReleaseAndRemoveWindowFromMap ( WindowFrameService frameService )
+        private Task HandleViewReleaseAndRemoveWindowFromMap ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
         private void AddWindowToMap ( WindowFrameService frameService )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
-        private WindowFrameService ^ GetWindowFromMap ( int viewId )
+        private WindowFrameService  GetWindowFromMap ( int viewId )
         { throw new System.NotImplementedException(); /* CSharpifier Warning */ }
         
         private void RemoveWindowFromMap ( int viewId )
@@ -71,7 +71,7 @@ namespace CalculatorApp
         
         private int m_mainViewId;
         private bool m_preLaunched;
-        private Windows . UI . Xaml . Controls . Primitives . Popup  m_aboutPopup;
+        private Windows.UI.Xaml.Controls.Primitives.Popup  m_aboutPopup;
     }
     
 }

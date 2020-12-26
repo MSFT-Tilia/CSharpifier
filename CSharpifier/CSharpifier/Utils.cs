@@ -56,6 +56,22 @@ namespace CSharpifier
             }
         }
 
+        public static string TrimAroundDot(string src)
+        {
+            return src.Replace(" .", ".").Replace(". ", ".");
+        }
+
+        public static string TrimAroundDoubleColon(string src)
+        {
+            return src.Replace(" ::", "::").Replace(":: ", "::");
+        }
+
+        public static string TrimAroundGreaterAndLess(string src)
+        {
+            return src.Replace(" >", ">").Replace("> ", ">")
+                .Replace(" <", "<").Replace("< ", "<");
+        }
+
         public static string InterpretAccessSpecifier(AccessSpecifier acc)
         {
             switch(acc)

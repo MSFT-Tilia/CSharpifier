@@ -34,6 +34,17 @@ namespace CSharpifier
             return _file;
         }
 
+        public override CSFileNode VisitFunctionDefinition([NotNull] CPPCXParser.FunctionDefinitionContext context)
+        { // function definition that is outside of any namespace
+
+            return _file;
+        }
+
+        public override CSFileNode VisitSimpleDeclaration([NotNull] CPPCXParser.SimpleDeclarationContext context)
+        {
+            return _file;
+        }
+
         private CSFileNode _file;
     }
 

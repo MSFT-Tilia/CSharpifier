@@ -1,0 +1,8 @@
+namespace CalculatorApp
+{
+    namespace ApplicationResourceKeys
+    {
+    }
+    
+}
+
