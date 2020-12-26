@@ -25,6 +25,7 @@ namespace CSharpifier
         }
 
         public string RetValType;
+        public string ParentType;
         public bool IsVirtual;
         public AccessSpecifier Access;
         public List<ParsedToken> Parameters;

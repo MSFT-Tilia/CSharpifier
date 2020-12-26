@@ -53,6 +53,19 @@ namespace CalculatorApp
     }
 }
 
+Collection<int, double> N1::C1::Test0()
+{}
+
+Windows::KI::ddd^ N1::C1::Test1()
+{}
+
+::Test2()
+{}
+
+Test3()
+{}
+
+
 /// <summary>
 /// Initializes the singleton application object. This is the first line of authored code
 /// executed, and as such is the logical equivalent of main() or WinMain().

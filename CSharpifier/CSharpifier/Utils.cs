@@ -2,6 +2,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace CSharpifier
 {
@@ -56,6 +57,12 @@ namespace CSharpifier
             }
         }
 
+
+        public static string TrimDefaultCombo(string src)
+        {
+            return TrimAroundDot(TrimAroundDoubleColon(TrimAroundGreaterAndLess(TrimLeftComma(src))));
+        }
+
         public static string TrimAroundDot(string src)
         {
             return src.Replace(" .", ".").Replace(". ", ".");
@@ -70,6 +77,11 @@ namespace CSharpifier
         {
             return src.Replace(" >", ">").Replace("> ", ">")
                 .Replace(" <", "<").Replace("< ", "<");
+        }
+
+        public static string TrimLeftComma(string src)
+        {
+            return src.Replace(" ,", ",");
         }
 
         public static string InterpretAccessSpecifier(AccessSpecifier acc)
@@ -115,17 +127,50 @@ namespace CSharpifier
             return res;
         }
 
-        public static T GetContextFirstChild<T>(IParseTree children)
+        public static T GetContextFirstChild<T>(IParseTree node)
         {
-            for(int i = 0; i < children.ChildCount; ++i)
+            for(int i = 0; i < node.ChildCount; ++i)
             {
-                var child = children.GetChild(i);
+                var child = node.GetChild(i);
                 if(typeof(T) == child.GetType())
                 {
                     return (T)child;
                 }
             }
             return default(T);
+        }
+
+        public static T GetContextFirstChildOffspring<T>(IParseTree node)
+        {
+            if(node.GetType() == typeof(T))
+            {
+                return (T)node;
+            }
+
+            for(int i = 0; i < node.ChildCount; ++i)
+            {
+                var child = node.GetChild(i);
+                var found = GetContextFirstChildOffspring<T>(child);
+                if(found != null)
+                {
+                    return found;
+                }
+            }
+            return default(T);
+        }
+
+        public static void GetContextChildrenOffspring<T>(ref List<T> results, IParseTree node)
+        {
+            if(node.GetType() == typeof(T))
+            {
+                results.Add((T)node);
+            }
+
+            for(int i = 0; i < node.ChildCount; ++i)
+            {
+                var child = node.GetChild(i);
+                GetContextChildrenOffspring<T>(ref results, child);
+            }
         }
 
 

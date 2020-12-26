@@ -189,7 +189,7 @@ namespace CSharpifier
             return base.VisitAccessSpecifier(context);
         }
 
-        private static void FetchMemberName(ref string name, List<ParsedToken> src)
+        public static void FetchMemberName(ref string name, List<ParsedToken> src)
         {
             Debug.Assert(src.Count > 0 || src.Count > 1);
 
@@ -204,7 +204,7 @@ namespace CSharpifier
             }
         }
 
-        private static void FetchFunctionParameters(ref List<ParsedToken> paramList, List<ParsedToken> src)
+        public static void FetchFunctionParameters(ref List<ParsedToken> paramList, List<ParsedToken> src)
         {
             int parenCount = 0;
             foreach(var token in src)
@@ -225,7 +225,7 @@ namespace CSharpifier
             }
         }
 
-        private static void FetchFunctionBody(ref List<ParsedToken> body, List<ParsedToken> src)
+        public static void FetchFunctionBody(ref List<ParsedToken> body, List<ParsedToken> src)
         {
             int braceCount = 0;
             foreach(var token in src)

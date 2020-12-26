@@ -119,10 +119,7 @@ namespace CSharpifier
         {
             if(!string.IsNullOrEmpty(rettype))
             {
-                rettype = Utils.TrimAroundDot(
-                    Utils.TrimAroundDoubleColon(
-                        Utils.TrimAroundGreaterAndLess(
-                        rettype)));
+                rettype = Utils.TrimDefaultCombo(rettype);
 
                 foreach(var pair in _typeMappingCPPCX2CS)
                 {

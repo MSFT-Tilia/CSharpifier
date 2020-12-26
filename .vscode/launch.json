@@ -5,7 +5,7 @@
             "name": "Debug ANTLR4 grammar",
             "type": "antlr-debug",
             "request": "launch",
-            "input": "CSharpifier/CSharpifier/Samples/App.xaml.h",
+            "input": "CSharpifier/CSharpifier/Samples/App.xaml.cpp",
             "grammar": "CPPWithCXParser/CPPCXParser.g4",
             "startRule": "translationUnit",
             "printParseTree": true,
