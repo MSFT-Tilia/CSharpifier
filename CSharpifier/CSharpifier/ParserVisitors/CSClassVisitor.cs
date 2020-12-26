@@ -76,13 +76,15 @@ namespace CSharpifier
                     Debug.Assert(funcdeclTokens.Count > 0);
 
                     node.Access = _currentAccess;
-                    FetchFunctionName(ref node.Name, funcdeclTokens);
+                    FetchMemberName(ref node.Name, funcdeclTokens);
                     FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
                     FetchFunctionBody(ref node.Body, funcbodyTokens);
 
+                    // TODO: fetch base-specifiers
+
                     if(functx.declSpecifierSeq() != null)
                     {
-                        node.RetValType = Utils.DeclSpecifierSeqToString(functx.declSpecifierSeq());
+                        node.RetValType = Utils.GetParserRuleText(functx.declSpecifierSeq(), TokenStream);
                     }
 
                     _class.Children.Add(node);
@@ -98,37 +100,64 @@ namespace CSharpifier
                     var attributeSpecSeq = Utils.GetContextFirstChild<CPPCXParser.AttributeSpecifierSeqContext>(context);
                     // TODO: handle attributeSpecSeq 
 
-                    string declSpecSeq = string.Empty;
                     var declSpecSeqCtx = Utils.GetContextFirstChild<CPPCXParser.DeclSpecifierSeqContext>(context);
                     if (declSpecSeqCtx != null)
                     {
-                        declSpecSeq = Utils.DeclSpecifierSeqToString(declSpecSeqCtx);
-                    }
-
-                    var declaratorList = Utils.GetContextFirstChild<CPPCXParser.MemberDeclaratorListContext>(context);
-                    if (declaratorList != null)
-                    {
-                        foreach (var declchild in declaratorList.children)
+                        var declaratorList = Utils.GetContextFirstChild<CPPCXParser.MemberDeclaratorListContext>(context);
+                        if (declaratorList != null)
                         {
-                            var decl = declchild as CPPCXParser.MemberDeclaratorContext;
-
-                            var text = decl.GetText();
-                            if(IsTheTextLooksLikeAFunction(text))
+                            foreach (var declchild in declaratorList.children)
                             {
-                                List<ParsedToken> funcdeclTokens = new List<ParsedToken>();
-                                Utils.GetParserRuleText(ref funcdeclTokens, decl, TokenStream);
+                                var decl = declchild as CPPCXParser.MemberDeclaratorContext;
 
-                                Debug.Assert(funcdeclTokens.Count > 0);
+                                var text = decl.GetText();
+                                if (DoesTheTextLookLikeAFunction(text))
+                                { // method
+                                    List<ParsedToken> funcdeclTokens = new List<ParsedToken>();
+                                    Utils.GetParserRuleText(ref funcdeclTokens, decl, TokenStream);
 
-                                var node = new CSMethodNode();
-                                node.RetValType = declSpecSeq;
+                                    Debug.Assert(funcdeclTokens.Count > 0);
+
+                                    var node = new CSMethodNode();
+                                    node.RetValType = Utils.GetParserRuleText(declSpecSeqCtx, TokenStream);
+                                    node.Access = _currentAccess;
+                                    FetchMemberName(ref node.Name, funcdeclTokens);
+                                    FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
+
+                                    _class.Children.Add(node);
+                                }
+                                else
+                                { // field.
+                                    List<ParsedToken> fielddeclTokens = new List<ParsedToken>();
+                                    Utils.GetParserRuleText(ref fielddeclTokens, decl, TokenStream);
+
+                                    Debug.Assert(fielddeclTokens.Count > 0);
+
+                                    var node = new CSFieldNode();
+                                    FetchMemberName(ref node.Name, fielddeclTokens);
+                                    node.RetValType = Utils.GetParserRuleText(declSpecSeqCtx, TokenStream);
+                                    node.Access = _currentAccess;
+                                    _class.Children.Add(node);
+                                }
+                            }
+                        }
+                        else
+                        { // try to peek simple field
+                            var declSpecSeq = Utils.GetParserRuleText(declSpecSeqCtx, TokenStream);
+                            Debug.Assert(declSpecSeq.Length > 0);
+
+                            if(DoesTheTextLookLikeAnSimpleFieldDecl(declSpecSeq))
+                            {
+                                var node = new CSFieldNode();
+                                node.Name = declSpecSeq;
                                 node.Access = _currentAccess;
-                                FetchFunctionName(ref node.Name, funcdeclTokens);
-                                FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
-
                                 _class.Children.Add(node);
                             }
                         }
+                    }
+                    else
+                    { // constructor and destructtor will go into this path
+                        // TODO: add logs here to check if we missed other types of member.
                     }
                 }
             }
@@ -160,18 +189,18 @@ namespace CSharpifier
             return base.VisitAccessSpecifier(context);
         }
 
-        private static void FetchFunctionName(ref string name, List<ParsedToken> src)
+        private static void FetchMemberName(ref string name, List<ParsedToken> src)
         {
             Debug.Assert(src.Count > 0 || src.Count > 1);
 
-            if(src[0].Name != "~")
+            if(src[0].Name != "~" && src[0].Name != "^" && src[0].Name != "*")
             { // normal function name
                 name = src[0].Name;
             }
             else
             { // destructor name
                 Debug.Assert(src.Count > 1);
-                name = "~" + src[1].Name;
+                name = src[0].Name + " " + src[1].Name;
             }
         }
 
@@ -217,13 +246,20 @@ namespace CSharpifier
             }
         }
 
-        private static bool IsTheTextLooksLikeAFunction(string text)
+        private static bool DoesTheTextLookLikeAFunction(string text)
         {
             return _regexFunctionSignature.IsMatch(text);
         }
 
+        private static bool DoesTheTextLookLikeAnSimpleFieldDecl(string text)
+        {
+            return _regexSimpleFieldDecl.IsMatch(text);
+        }
+
         private AccessSpecifier _currentAccess;
         private CSClassNode _class;
-        private static readonly Regex _regexFunctionSignature = new Regex(@"^~?\w+\(.*\)$");
+        private static readonly Regex _regexFunctionSignature = new Regex(@"^(~|\^|\*)?\w+\(.*\)\w*$");
+        private static readonly Regex _regexSimpleFieldDecl = new Regex(@"^\w+\s+\w+$");
+
     }
 }

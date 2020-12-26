@@ -6,6 +6,9 @@ namespace CSharpifier
         {
             return CSNodeType.Field;
         }
+
+        public string RetValType;
+        public AccessSpecifier Access;
     }
 }
 

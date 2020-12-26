@@ -7,6 +7,7 @@ namespace CSharpifier
 {
     public abstract class CSharpEmitterBase
     {
+        // File
         public virtual void OnEnterFile(StreamWriter ostream, CSFileNode node)
         { }
 
@@ -14,6 +15,7 @@ namespace CSharpifier
         { }
 
 
+        // Namespace
         public virtual void OnEnterNamespace(StreamWriter ostream, CSNamespaceNode node)
         { }
 
@@ -21,6 +23,7 @@ namespace CSharpifier
         { }
 
 
+        // Using
         public virtual void OnEnterUsing(StreamWriter ostream, CSUsingNode node)
         { }
 
@@ -28,6 +31,7 @@ namespace CSharpifier
         { }
 
 
+        // Class(Struct)
         public virtual void OnEnterClass(StreamWriter ostream, CSClassNode node)
         { }
 
@@ -35,10 +39,19 @@ namespace CSharpifier
         { }
 
 
+        // Method
         public virtual void OnEnterMethod(StreamWriter ostream, CSMethodNode node)
         { }
 
         public virtual void OnExitMethod(StreamWriter ostream, CSMethodNode node)
+        { }
+
+
+        // Field
+        public virtual void OnEnterField(StreamWriter ostream, CSFieldNode node)
+        { }
+
+        public virtual void OnExitField(StreamWriter ostream, CSFieldNode node)
         { }
     }
 }

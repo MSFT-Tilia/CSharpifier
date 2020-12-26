@@ -11,6 +11,7 @@ namespace CSharpifier
         {
             //TestSimpleCPP();
             TestAppXamlCPP();
+            //TestConverting();
         }
 
         static void TestSimpleCPP()
@@ -37,6 +38,20 @@ namespace CSharpifier
 
             CSharpGen gen = new CSharpGen();
             gen.Generate(@"..\..\..\Samples\output\App.xaml.h.cs", file.RootNode, new CSharpEmitter());
+        }
+
+        static void TestConverting()
+        {
+            CSharpFile hfile = new CSharpFile();
+            hfile.Parse(@"..\..\..\Samples\App.xaml.h");
+
+            CSharpFile cppfile = new CSharpFile();
+            cppfile.Parse(@"..\..\..\Samples\App.xaml.cpp");
+
+            CSFileNode onefile = (new CSFileNodeMeger()).Merge(hfile.RootNode, cppfile.RootNode);
+
+            CSharpGen gen = new CSharpGen();
+            gen.Generate(@"..\..\..\Samples\output\App.xaml.cs", onefile, new CSharpEmitter());
         }
 
     }

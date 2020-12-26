@@ -12,6 +12,7 @@ namespace CSharpifier
         {
             _line = new StringBuilder();
             _lineStarted = false;
+            _prevTokenWasDot = false;
             _indentation = 0;
         }
 
@@ -99,12 +100,24 @@ namespace CSharpifier
             OutputAppendsLine(ostream);
         }
 
+        public override void OnEnterField(StreamWriter ostream, CSFieldNode node)
+        {
+            LineAppendsTerm(Utils.InterpretAccessSpecifier(node.Access));
+            HandleFieldRetType(ostream, node.RetValType);
+            HandleFieldName(ostream, node.Name);
+            LineAppendsSemi();
+        }
+
+        public override void OnExitField(StreamWriter ostream, CSFieldNode node)
+        {
+            OutputAppendsLine(ostream);
+        }
 
         #region string format helpers
 
         private void HandleFunctionRetType(StreamWriter ostream, string rettype)
         {
-            if(rettype != null)
+            if(!string.IsNullOrEmpty(rettype))
             {
                 foreach(var pair in _typeMappingCPPCX2CS)
                 {
@@ -117,6 +130,24 @@ namespace CSharpifier
                 }
 
                 LineAppendsTerm(rettype);
+            }
+        }
+
+        private void HandleFieldRetType(StreamWriter ostream, string rettype)
+        {
+            HandleFunctionRetType(ostream, rettype);
+        }
+
+        private void HandleFieldName(StreamWriter ostream, string name)
+        {
+            if(!string.IsNullOrEmpty(name))
+            {
+                foreach(var pair in _tokenMappingCPPCX2CS)
+                {
+                    name = name.Replace(pair.Key, pair.Value);
+                }
+
+                LineAppendsTerm(name);
             }
         }
 
@@ -201,7 +232,18 @@ namespace CSharpifier
             {
                 if(_lineStarted && !forceNoSpace)
                 {
-                    _line.Append(" ");
+                    if(!_prevTokenWasDot && term != ".")
+                    {
+                        _line.Append(" ");
+                    }
+                    else if(_prevTokenWasDot && term != ".")
+                    {
+                        _prevTokenWasDot = false;
+                    }
+                    else if(term == ".")
+                    {
+                        _prevTokenWasDot = true;
+                    }
                 }
                 else
                 {
@@ -311,6 +353,7 @@ namespace CSharpifier
         };
 
         private bool _lineStarted;
+        private bool _prevTokenWasDot;
         private int _indentation;
         private StringBuilder _line;
         #endregion // private members

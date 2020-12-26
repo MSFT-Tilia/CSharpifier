@@ -31,6 +31,31 @@ namespace CSharpifier
             }
         }
 
+        public static string GetParserRuleText(IParseTree root, ITokenStream tokenStream)
+        {
+            string res = string.Empty;
+            GetParserRuleText(ref res, root, tokenStream);
+            return res;
+        }
+
+        public static void GetParserRuleText(ref string res, IParseTree node, ITokenStream tokenStream)
+        {
+            if(node.ChildCount == 0)
+            {
+                if(res.Length > 0)
+                {
+                    res += " ";
+                }
+                res += tokenStream.GetText(node.SourceInterval);
+            }
+            
+            for(int i = 0; i < node.ChildCount; ++i)
+            {
+                var child = node.GetChild(i);
+                GetParserRuleText(ref res, child, tokenStream);
+            }
+        }
+
         public static string InterpretAccessSpecifier(AccessSpecifier acc)
         {
             switch(acc)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace CSharpifier
 {
@@ -44,6 +45,14 @@ namespace CSharpifier
                 case CSNodeType.Method:
                     _curEmitter.OnEnterMethod(_curTarget, node as CSMethodNode);
                     break;
+                case CSNodeType.Field:
+                    _curEmitter.OnEnterField(_curTarget, node as CSFieldNode);
+                    break;
+
+                default:
+                    // some types don't have emitter to take care of.
+                    Debug.Assert(false);
+                    break;
             }
         }
 
@@ -65,6 +74,14 @@ namespace CSharpifier
                     break;
                 case CSNodeType.Method:
                     _curEmitter.OnExitMethod(_curTarget, node as CSMethodNode);
+                    break;
+                case CSNodeType.Field:
+                    _curEmitter.OnExitField(_curTarget, node as CSFieldNode);
+                    break;
+
+                default:
+                    // some types don't have emitter to take care of.
+                    Debug.Assert(false);
                     break;
             }
         }
