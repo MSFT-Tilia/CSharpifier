@@ -5,53 +5,35 @@ using System.IO;
 
 namespace CSharpifier
 {
-    public abstract class CSharpEmitterBase
+    public abstract class CSharpEmitterBase : CSNodeVisitorBase
     {
+        public CSharpEmitterBase()
+        {}
+
+        public StreamWriter OutputStream;
+
         // File
-        public virtual void OnEnterFile(StreamWriter ostream, CSFileNode node)
-        { }
-
-        public virtual void OnExitFile(StreamWriter ostream, CSFileNode node)
-        { }
-
+        public override void OnEnterFile(CSFileNode node){ base.OnEnterFile(node); }
+        public override void OnExitFile(CSFileNode node){ base.OnExitFile(node); }
 
         // Namespace
-        public virtual void OnEnterNamespace(StreamWriter ostream, CSNamespaceNode node)
-        { }
-
-        public virtual void OnExitNamespace(StreamWriter ostream, CSNamespaceNode node)
-        { }
-
+        public override void OnEnterNamespace(CSNamespaceNode node){ base.OnEnterNamespace(node); }
+        public override void OnExitNamespace(CSNamespaceNode node){ base.OnExitNamespace(node); }
 
         // Using
-        public virtual void OnEnterUsing(StreamWriter ostream, CSUsingNode node)
-        { }
-
-        public virtual void OnExitUsing(StreamWriter ostream, CSUsingNode node)
-        { }
-
+        public override void OnEnterUsing(CSUsingNode node){ base.OnEnterUsing(node); }
+        public override void OnExitUsing(CSUsingNode node){ base.OnExitUsing(node); }
 
         // Class(Struct)
-        public virtual void OnEnterClass(StreamWriter ostream, CSClassNode node)
-        { }
-
-        public virtual void OnExitClass(StreamWriter ostream, CSClassNode node)
-        { }
-
+        public override void OnEnterClass(CSClassNode node){ base.OnEnterClass(node); }
+        public override void OnExitClass(CSClassNode node){ base.OnExitClass(node); }
 
         // Method
-        public virtual void OnEnterMethod(StreamWriter ostream, CSMethodNode node)
-        { }
-
-        public virtual void OnExitMethod(StreamWriter ostream, CSMethodNode node)
-        { }
-
+        public override void OnEnterMethod(CSMethodNode node){ base.OnEnterMethod(node); }
+        public override void OnExitMethod(CSMethodNode node) { base.OnExitMethod(node); }
 
         // Field
-        public virtual void OnEnterField(StreamWriter ostream, CSFieldNode node)
-        { }
-
-        public virtual void OnExitField(StreamWriter ostream, CSFieldNode node)
-        { }
+        public override void OnEnterField(CSFieldNode node){ base.OnEnterField(node); }
+        public override void OnExitField(CSFieldNode node){ base.OnExitField(node); }
     }
 }

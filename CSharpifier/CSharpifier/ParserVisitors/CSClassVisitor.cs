@@ -101,17 +101,14 @@ namespace CSharpifier
                                 node.RetValType = Utils.GetParserRuleText(declSpecifierList[0], TokenStream);
                                 break;
 
-                            case 2:
-                                node.RetValType = Utils.GetParserRuleText(declSpecifierList[0], TokenStream);
-                                node.ParentType = Utils.GetParserRuleText(declSpecifierList[1], TokenStream); // prefix
-                                break;
-
                             default:
                                 // what is this?
                                 Debug.Assert(false);
                                 break;
                         }
                     }
+
+                    node.ParentType = _class.Name;
 
                     _class.Children.Add(node);
                 }

@@ -58,7 +58,7 @@ namespace CSharpifier
         }
 
 
-        public static string TrimDefaultCombo(string src)
+        public static string TrimDefault(string src)
         {
             return TrimAroundDot(TrimAroundDoubleColon(TrimAroundGreaterAndLess(TrimLeftComma(src))));
         }

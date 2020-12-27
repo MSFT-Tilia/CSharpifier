@@ -9,9 +9,13 @@ namespace CSharpifier
         public CSFileNodeMeger()
         { }
 
-        public CSFileNode Merge(CSFileNode hNode, CSFileNode cppNode)
+        public CSFileNode Merge(CSFileNode headerFileNode, CSFileNode sourceFileNode)
         {
             CSFileNode resNode = new CSFileNode();
+
+
+
+
 
             return resNode;
         }

@@ -16,74 +16,78 @@ namespace CSharpifier
             _indentation = 0;
         }
 
-        public override void OnEnterNamespace(StreamWriter ostream, CSNamespaceNode node)
+        public override void OnEnterNamespace(CSNamespaceNode node)
         {
             LineAppendsTerm("namespace");
             LineAppendsTerm(node.Name);
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
 
             LineAppendsLeftBrace();
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
 
             Indent();
+
+            base.OnEnterNamespace(node);
         }
 
-        public override void OnExitNamespace(StreamWriter ostream, CSNamespaceNode node)
+        public override void OnExitNamespace(CSNamespaceNode node)
         {
             Outdent();
 
             LineAppendsRightBrace();
-            OutputAppendsLine(ostream);
-            OutputAppendsLine(ostream); // empty line
+            OutputAppendsLine();
+            OutputAppendsLine(); // empty line
         }
 
-        public override void OnEnterClass(StreamWriter ostream, CSClassNode node)
+        public override void OnEnterClass(CSClassNode node)
         {
-            OutputAppendsLine(ostream); // empty line
+            OutputAppendsLine(); // empty line
 
             LineAppendsTerm("public class");
             LineAppendsTerm(node.Name);
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
 
             LineAppendsLeftBrace();
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
 
             Indent();
+
+            base.OnEnterClass(node);
         }
 
-        public override void OnExitClass(StreamWriter ostream, CSClassNode node)
+        public override void OnExitClass(CSClassNode node)
         {
             Outdent();
 
             LineAppendsRightBrace();
-            OutputAppendsLine(ostream);
-            OutputAppendsLine(ostream); // empty line
+            OutputAppendsLine();
+            OutputAppendsLine(); // empty line
         }
 
-        public override void OnEnterMethod(StreamWriter ostream, CSMethodNode node)
+        public override void OnEnterMethod(CSMethodNode node)
         {
             LineAppendsTerm(Utils.InterpretAccessSpecifier(node.Access));
 
-            HandleFunctionRetType(ostream, node.RetValType);
+            HandleFunctionRetType(node.RetValType);
 
-            HandleFunctionName(ostream, node.Name);
+            HandleFunctionName(node.Name);
 
             if(node.Parameters.Count > 0)
             {
-                HandleFunctionParameters(ostream, node.Parameters);
+                HandleFunctionParameters(node.Parameters);
             }
             else
             {
                 LineAppendsTerm("()");
             }
 
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
 
             if(node.Body.Count > 0)   
             { // the method has definition
                 // TODO: use regex to interpret method's body
-                //OutputAppendsLine(ostream);
-                HandleFunctionBody(ostream, node.Body);
+                //OutputAppendsLine();
+                HandleFunctionBody(node.Body);
             }
             else
             { // declaration only, put a default implementation
@@ -92,34 +96,38 @@ namespace CSharpifier
                 LineAppendsRightBrace();
             }
 
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
+
+            base.OnEnterMethod(node);
         }
 
-        public override void OnExitMethod(StreamWriter ostream, CSMethodNode node)
+        public override void OnExitMethod(CSMethodNode node)
         {
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
         }
 
-        public override void OnEnterField(StreamWriter ostream, CSFieldNode node)
+        public override void OnEnterField(CSFieldNode node)
         {
             LineAppendsTerm(Utils.InterpretAccessSpecifier(node.Access));
-            HandleFieldRetType(ostream, node.RetValType);
-            HandleFieldName(ostream, node.Name);
+            HandleFieldRetType(node.RetValType);
+            HandleFieldName(node.Name);
             LineAppendsSemi();
+
+            base.OnEnterField(node);
         }
 
-        public override void OnExitField(StreamWriter ostream, CSFieldNode node)
+        public override void OnExitField(CSFieldNode node)
         {
-            OutputAppendsLine(ostream);
+            OutputAppendsLine();
         }
 
         #region string format helpers
 
-        private void HandleFunctionRetType(StreamWriter ostream, string rettype)
+        private void HandleFunctionRetType(string rettype)
         {
             if(!string.IsNullOrEmpty(rettype))
             {
-                rettype = Utils.TrimDefaultCombo(rettype);
+                rettype = Utils.TrimDefault(rettype);
 
                 foreach(var pair in _typeMappingCPPCX2CS)
                 {
@@ -135,18 +143,19 @@ namespace CSharpifier
             }
         }
 
-        private void HandleFunctionName(StreamWriter ostream, string name)
+        private void HandleFunctionName(string name)
         {
-            HandleFieldName(ostream, name);
+            HandleFieldName(name);
         }
 
-        private void HandleFieldRetType(StreamWriter ostream, string rettype)
+        private void HandleFieldRetType(string rettype)
         {
-            HandleFunctionRetType(ostream, rettype);
+            HandleFunctionRetType(rettype);
         }
 
-        private void HandleFieldName(StreamWriter ostream, string name)
+        private void HandleFieldName(string name)
         {
+            name = Utils.TrimDefault(name);
             if(!string.IsNullOrEmpty(name))
             {
                 foreach(var pair in _tokenMappingCPPCX2CS)
@@ -158,7 +167,7 @@ namespace CSharpifier
             }
         }
 
-        private void HandleFunctionParameters(StreamWriter ostream, List<ParsedToken> tokens)
+        private void HandleFunctionParameters(List<ParsedToken> tokens)
         {
             LineAppendsLeftParen();
             foreach(var token in tokens)
@@ -172,7 +181,7 @@ namespace CSharpifier
             LineAppendsRightParen();
         }
 
-        private void HandleFunctionBody(StreamWriter ostream, List<ParsedToken> tokens)
+        private void HandleFunctionBody(List<ParsedToken> tokens)
         {
             LineAppendsLeftBrace();
 
@@ -187,7 +196,7 @@ namespace CSharpifier
 
                 if(IsLineFeedToken(token.Name))
                 {
-                    OutputAppendsLine(ostream);
+                    OutputAppendsLine();
                 }
 
                 if(IsIndentToken(token.Name))
@@ -300,9 +309,9 @@ namespace CSharpifier
             LineClear();
         }
 
-        private void OutputAppendsLine(StreamWriter outputStream)
+        private void OutputAppendsLine()
         {
-            outputStream.WriteLine(_line.ToString());
+            OutputStream.WriteLine(_line.ToString());
             LineClear();
         }
 
