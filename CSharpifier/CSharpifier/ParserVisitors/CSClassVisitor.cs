@@ -82,7 +82,10 @@ namespace CSharpifier
                     node.Name = Utils.GetParserRuleText(idExprCtx, TokenStream);
 
                     FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
-                    FetchFunctionBody(ref node.Body, funcbodyTokens);
+
+                    // function body
+                    var bodyCtx = Utils.GetContextFirstChildOffspring<CPPCXParser.CompoundStatementContext>(functx.functionBody());
+                    Utils.GetParserRuleText(ref node.Body, bodyCtx, TokenStream);
 
                     // TODO: fetch base-specifiers
 
@@ -108,7 +111,7 @@ namespace CSharpifier
                         }
                     }
 
-                    node.ParentType = _class.Name;
+                    node.ParentType = CSNodeUtils.GetFullName(_class);
 
                     _class.Children.Add(node);
                 }
@@ -142,6 +145,7 @@ namespace CSharpifier
                                     Debug.Assert(funcdeclTokens.Count > 0);
 
                                     var node = new CSMethodNode();
+                                    node.ParentType = CSNodeUtils.GetFullName(_class);
                                     node.RetValType = Utils.GetParserRuleText(declSpecSeqCtx, TokenStream);
                                     node.Access = _currentAccess;
                                     FetchMemberName(ref node.Name, funcdeclTokens);
@@ -157,8 +161,8 @@ namespace CSharpifier
                                     Debug.Assert(fielddeclTokens.Count > 0);
 
                                     var node = new CSFieldNode();
-                                    FetchMemberName(ref node.Name, fielddeclTokens);
                                     node.RetValType = Utils.GetParserRuleText(declSpecSeqCtx, TokenStream);
+                                    FetchMemberName(ref node.Name, fielddeclTokens);
                                     node.Access = _currentAccess;
                                     _class.Children.Add(node);
                                 }

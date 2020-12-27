@@ -10,8 +10,8 @@ namespace CSharpifier
         static void Main(string[] args)
         {
             //TestSimpleCPP();
-            TestAppXamlCPP();
-            //TestConverting();
+            //TestAppXamlCPP();
+            TestConverting();
         }
 
         static void TestSimpleCPP()

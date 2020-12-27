@@ -24,6 +24,7 @@ namespace CSharpifier
         {
             CSNamespaceVisitor visitor = new CSNamespaceVisitor(InputStream, TokenStream);
             var node = visitor.Namespace;
+            node.Parent = _ns;
             node.Name = context.qualifiednamespacespecifier().GetText();
 
             visitor.Visit(context.namespaceBody);
@@ -36,6 +37,7 @@ namespace CSharpifier
         {
             CSClassVisitor visitor = new CSClassVisitor(InputStream, TokenStream);
             var node = visitor.Class;
+            node.Parent = _ns;
 
             // class name
             node.Name = context.classHead().classHeadName().GetText();

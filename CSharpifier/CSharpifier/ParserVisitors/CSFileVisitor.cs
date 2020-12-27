@@ -40,6 +40,8 @@ namespace CSharpifier
         { // function definition that is outside of any namespace
 
             var node = new CSMethodNode();
+            node.Parent = _file;
+
             // C++ doesn't have access context in this case. use Public as default.
             // the right access will get known while declaration and definition has been merged.
             node.Access = AccessSpecifier.Public;
@@ -61,7 +63,7 @@ namespace CSharpifier
 
                     case 2:
                         node.RetValType = Utils.GetParserRuleText(declSpecifierList[0], TokenStream);
-                        node.ParentType = Utils.GetParserRuleText(declSpecifierList[1], TokenStream);
+                        node.ParentType = Utils.TrimDefault(Utils.GetParserRuleText(declSpecifierList[1], TokenStream));
                         break;
 
                     default:
@@ -79,6 +81,9 @@ namespace CSharpifier
             //Utils.FetchMemberName(ref node.Name, funcdeclTokens);
             //Utils.FetchFunctionParameters(ref node.Parameters, funcdeclTokens);
             //Utils.FetchFunctionBody(ref node.Body, funcbodyTokens);
+
+            var bodyCtx = Utils.GetContextFirstChildOffspring<CPPCXParser.CompoundStatementContext>(context.functionBody());
+            Utils.GetParserRuleText(ref node.Body, bodyCtx, TokenStream);
 
             // TODO: fetch base-specifiers
 

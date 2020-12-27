@@ -10,9 +10,10 @@ namespace CSharpifier
 
     public class CSClassNode : CSNode
     {
+        public string FullName;
+
         public CSClassNode()
-        {
-        }
+        {}
 
         public override CSNodeType NodeType()
         {
