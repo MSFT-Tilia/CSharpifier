@@ -29,17 +29,17 @@ namespace CSharpifier
         }
 
 
-        public  void Indent()
+        public void Indent()
         {
             ++_indentation;
             LineClear();
         }
 
-        public  void Outdent()
+        public void Outdent()
         {
             --_indentation;
 
-            if(_indentation < 0)
+            if (_indentation < 0)
             {
                 // _indentation must never be negative.
                 throw new NotSupportedException();
@@ -48,36 +48,39 @@ namespace CSharpifier
             LineClear();
         }
 
-        public  void MakeIndentations()
+        public void MakeIndentations()
         {
-            for(int i= 0; i < _indentation; ++i)
+            for (int i = 0; i < _indentation; ++i)
             {
                 _line.Append(_indentSymbol);
             }
         }
 
-        public  void LineClear()
+        public void LineClear(bool needIndentations = true)
         {
             _line.Clear();
-            MakeIndentations();
+            if(needIndentations)
+                MakeIndentations();
             _lineStarted = false;
         }
 
-        public  void LineAppendsTerm(string term, bool forceNoSpace = false)
+        public void LineAppendsTerm(string term, bool forceNoSpace = false)
         {
-            if(!string.IsNullOrEmpty(term))
+            if (!string.IsNullOrEmpty(term))
             {
-                if(_lineStarted && !forceNoSpace)
+                forceNoSpace = forceNoSpace || IsNoPriorSpaceToke(term);
+
+                if (_lineStarted && !forceNoSpace)
                 {
-                    if(!_prevTokenWasDot && term != ".")
+                    if (!_prevTokenWasDot && term != ".")
                     {
                         _line.Append(" ");
                     }
-                    else if(_prevTokenWasDot && term != ".")
+                    else if (_prevTokenWasDot && term != ".")
                     {
                         _prevTokenWasDot = false;
                     }
-                    else if(term == ".")
+                    else if (term == ".")
                     {
                         _prevTokenWasDot = true;
                     }
@@ -91,46 +94,55 @@ namespace CSharpifier
             }
         }
 
-        public  void LineAppendsLeftParen()
+        public void LineAppendsLeftParen()
         {
             LineAppendsTerm("(");
         }
 
-        public  void LineAppendsRightParen()
+        public void LineAppendsRightParen()
         {
             LineAppendsTerm(")");
         }
 
-        public  void LineAppendsLeftBrace()
+        public void LineAppendsLeftBrace()
         {
             LineAppendsTerm("{");
         }
 
-        public  void LineAppendsRightBrace()
+        public void LineAppendsRightBrace()
         {
             LineAppendsTerm("}");
         }
 
-        public  void LineAppendsSemi()
+        public void LineAppendsSemi()
         {
             LineAppendsTermNoSpace(";");
         }
 
-        public  void LineAppendsTermNoSpace(string term)
+        public void LineAppendsTermNoSpace(string term)
         {
-            if(!string.IsNullOrEmpty(term))
+            if (!string.IsNullOrEmpty(term))
             {
                 _line.Append(term);
             }
         }
 
-        public  void OutputAppendsTerms(StringBuilder terms)
+        public void OutputAppendsTerms(StringBuilder terms)
         {
             _output.Write(terms.ToString());
             LineClear();
         }
 
-        public  void OutputAppendsLine()
+        public void FlushLine()
+        {
+            if(_line.Length > 0)
+            {
+                _output.Write(_line.ToString());
+            }
+            LineClear(false);
+        }
+
+        public void OutputAppendsLine()
         {
             _output.WriteLine(_line.ToString());
             LineClear();
@@ -151,10 +163,15 @@ namespace CSharpifier
             return _outdentTokens.Contains(token);
         }
 
+        public bool IsNoPriorSpaceToke(string token)
+        {
+            return _noPriorSpaceTokens.Contains(token);
+        }
+
         // private readonly string _indentSymbol = "\t";  // indent using Tab
         private static readonly string _indentSymbol = "    ";   // indent using spaces
         private static readonly HashSet<string> _lineFeedTokens = new HashSet<string>() {
-            ",", "{", "}", ":"
+            ",", "{", "}", ":", ";"
         };
 
         private static readonly HashSet<string> _indentTokens = new HashSet<string>() {
@@ -163,6 +180,10 @@ namespace CSharpifier
 
         private static readonly HashSet<string> _outdentTokens = new HashSet<string>() {
             "}",
+        };
+
+        private static readonly HashSet<string> _noPriorSpaceTokens = new HashSet<string>() {
+            "(", ")", ";"
         };
 
         private bool _lineStarted;
