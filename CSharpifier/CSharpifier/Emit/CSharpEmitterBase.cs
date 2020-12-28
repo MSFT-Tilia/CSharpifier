@@ -10,7 +10,22 @@ namespace CSharpifier
         public CSharpEmitterBase()
         {}
 
-        public StreamWriter OutputStream;
+        public StreamWriter OutputStream
+        {
+            get
+            {
+                return _outputStream;
+            }
+
+            set
+            {
+                _outputStream = value;
+                OnOutputStreamChanged?.Invoke(_outputStream);
+            }
+        }
+
+        public Action<StreamWriter> OnOutputStreamChanged;
+
 
         // File
         public override void OnEnterFile(CSFileNode node){ base.OnEnterFile(node); }
@@ -35,5 +50,7 @@ namespace CSharpifier
         // Field
         public override void OnEnterField(CSFieldNode node){ base.OnEnterField(node); }
         public override void OnExitField(CSFieldNode node){ base.OnExitField(node); }
+
+        private StreamWriter _outputStream;
     }
 }
