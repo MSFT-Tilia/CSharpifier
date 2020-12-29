@@ -11,7 +11,8 @@ namespace CSharpifier
         {
             //TestSimpleCPP();
             //TestAppXamlCPP();
-            TestConverting();
+            //TestConverting();
+            TestCaclXaml();
         }
 
         static void TestSimpleCPP()
@@ -33,16 +34,19 @@ namespace CSharpifier
         static void TestCaclXaml()
         {
             CSharpFile hfile = new CSharpFile();
-            hfile.Parse(@"..\..\..\Samples\.xaml.h");
+            hfile.Parse(@"..\..\..\Samples\Calculator.xaml.h");
+
+            (new CSharpGen()).Generate(@"..\..\..\Samples\output\Calculator.xaml.h.cs", hfile.RootNode, new CSharpEmitter());
 
             CSharpFile cppfile = new CSharpFile();
-            cppfile.Parse(@"..\..\..\Samples\App.xaml.cpp");
+            cppfile.Parse(@"..\..\..\Samples\Calculator.xaml.cpp");
 
-            CSFileNode onefile = (new CSFileNodeMeger()).Merge(hfile.RootNode, cppfile.RootNode);
+            (new CSharpGen()).Generate(@"..\..\..\Samples\output\Calculator.xaml.cpp.cs", hfile.RootNode, new CSharpEmitter());
 
-            CSharpGen gen = new CSharpGen();
-            gen.Generate(@"..\..\..\Samples\output\App.xaml.cs", onefile, new CSharpEmitter());
+            //CSFileNode onefile = (new CSFileNodeMeger()).Merge(hfile.RootNode, cppfile.RootNode);
 
+            //CSharpGen gen = new CSharpGen();
+            //gen.Generate(@"..\..\..\Samples\output\App.xaml.cs", onefile, new CSharpEmitter());
         }
 
         static void TestAppXamlCPP()

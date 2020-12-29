@@ -313,8 +313,12 @@ blockDeclaration:
 aliasDeclaration:
 	Using Identifier attributeSpecifierSeq? Assign theTypeId Semi;
 
+delegateDeclaration:
+	accessSpecifier? Delegate declSpecifierSeq? initDeclaratorList? Semi;
+
 simpleDeclaration:
-	declSpecifierSeq? initDeclaratorList? Semi
+	 declSpecifierSeq? initDeclaratorList? Semi
+	| delegateDeclaration
 	| attributeSpecifierSeq declSpecifierSeq? initDeclaratorList Semi;
 
 staticAssertDeclaration:
@@ -449,7 +453,7 @@ linkageSpecification:
 attributeSpecifierSeq: attributeSpecifier+;
 
 attributeSpecifier:
-	LeftBracket LeftBracket attributeList? RightBracket RightBracket
+	 LeftBracket LeftBracket attributeList? RightBracket RightBracket
 	| alignmentspecifier;
 
 alignmentspecifier:
@@ -612,12 +616,16 @@ cxAttribute: LeftBracket classHeadName RightBracket;
 
 classKey: Ref? (Class | Struct);
 
+memberDelegateDeclaration:
+	accessSpecifier? Delegate attributeSpecifierSeq? declSpecifierSeq? memberDeclaratorList? Semi;
+
 memberSpecification:
 	(memberdeclaration | accessSpecifier Colon)+;
 
 memberdeclaration:
-	attributeSpecifierSeq? declSpecifierSeq? memberDeclaratorList? Semi
+	 attributeSpecifierSeq? declSpecifierSeq? memberDeclaratorList? Semi
 	| functionDefinition
+	| memberDelegateDeclaration
 	| propertyDefinition
 	| usingDeclaration
 	| staticAssertDeclaration

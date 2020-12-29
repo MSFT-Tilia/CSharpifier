@@ -804,6 +804,18 @@ public partial class CPPCXParserBaseListener : ICPPCXParserListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitAliasDeclaration([NotNull] CPPCXParser.AliasDeclarationContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="CPPCXParser.delegateDeclaration"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterDelegateDeclaration([NotNull] CPPCXParser.DelegateDeclarationContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="CPPCXParser.delegateDeclaration"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitDelegateDeclaration([NotNull] CPPCXParser.DelegateDeclarationContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="CPPCXParser.simpleDeclaration"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -1763,6 +1775,18 @@ public partial class CPPCXParserBaseListener : ICPPCXParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitClassKey([NotNull] CPPCXParser.ClassKeyContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="CPPCXParser.memberDelegateDeclaration"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterMemberDelegateDeclaration([NotNull] CPPCXParser.MemberDelegateDeclarationContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="CPPCXParser.memberDelegateDeclaration"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitMemberDelegateDeclaration([NotNull] CPPCXParser.MemberDelegateDeclarationContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="CPPCXParser.memberSpecification"/>.
 	/// <para>The default implementation does nothing.</para>

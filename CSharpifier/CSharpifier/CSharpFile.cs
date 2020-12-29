@@ -32,6 +32,8 @@ namespace CSharpifier
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             CPPCXParser parser = new CPPCXParser(tokens);
 
+            parser.AddErrorListener(new ASTParserErrorListener());
+
             parser.BuildParseTree = true;
             var tu = parser.translationUnit();
 

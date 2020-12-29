@@ -74,6 +74,8 @@ Decltype: 'decltype';
 
 Default: 'default';
 
+Delegate: 'delegate';
+
 Delete: 'delete';
 
 Do: 'do';

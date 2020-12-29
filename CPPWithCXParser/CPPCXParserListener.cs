@@ -671,6 +671,16 @@ public interface ICPPCXParserListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitAliasDeclaration([NotNull] CPPCXParser.AliasDeclarationContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="CPPCXParser.delegateDeclaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterDelegateDeclaration([NotNull] CPPCXParser.DelegateDeclarationContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="CPPCXParser.delegateDeclaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitDelegateDeclaration([NotNull] CPPCXParser.DelegateDeclarationContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="CPPCXParser.simpleDeclaration"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -1470,6 +1480,16 @@ public interface ICPPCXParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitClassKey([NotNull] CPPCXParser.ClassKeyContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="CPPCXParser.memberDelegateDeclaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterMemberDelegateDeclaration([NotNull] CPPCXParser.MemberDelegateDeclarationContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="CPPCXParser.memberDelegateDeclaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitMemberDelegateDeclaration([NotNull] CPPCXParser.MemberDelegateDeclarationContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="CPPCXParser.memberSpecification"/>.
 	/// </summary>

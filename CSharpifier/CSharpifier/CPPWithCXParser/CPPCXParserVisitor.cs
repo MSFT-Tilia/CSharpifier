@@ -416,6 +416,12 @@ public interface ICPPCXParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAliasDeclaration([NotNull] CPPCXParser.AliasDeclarationContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="CPPCXParser.delegateDeclaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDelegateDeclaration([NotNull] CPPCXParser.DelegateDeclarationContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="CPPCXParser.simpleDeclaration"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -895,6 +901,12 @@ public interface ICPPCXParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitClassKey([NotNull] CPPCXParser.ClassKeyContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CPPCXParser.memberDelegateDeclaration"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMemberDelegateDeclaration([NotNull] CPPCXParser.MemberDelegateDeclarationContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CPPCXParser.memberSpecification"/>.
 	/// </summary>
