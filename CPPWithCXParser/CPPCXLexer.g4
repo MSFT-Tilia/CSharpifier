@@ -34,6 +34,7 @@ Directive: '#' ~ [\n]* -> channel (HIDDEN);
 
 ParamPrompt: ('_In_'|'_Out'|'_InOut_') -> skip;
 
+
 /*Keywords*/
 
 Alignas: 'alignas';
@@ -199,6 +200,7 @@ Volatile: 'volatile';
 Wchar: 'wchar_t';
 
 While: 'while';
+
 /*Operators*/
 
 LeftParen: '(';
@@ -302,6 +304,10 @@ fragment Universalcharactername:
 	'\\u' Hexquad
 	| '\\U' Hexquad Hexquad;
 
+/* Dependency Property Keywords */
+//DEPENDENCY_PROPERTY_OWNER : 'DEPENDENCY_PROPERTY_OWNER';
+//DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK: 'DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK';
+
 Identifier:
 	/*
 	 Identifiernondigit | Identifier Identifiernondigit | Identifier DIGIT
@@ -331,6 +337,8 @@ fragment OCTALDIGIT: [0-7];
 fragment HEXADECIMALDIGIT: [0-9a-fA-F];
 
 fragment BINARYDIGIT: [01];
+
+fragment UPPERCASENONDIGIT: [A-Z_];
 
 Integersuffix:
 	Unsignedsuffix Longsuffix?
@@ -421,3 +429,4 @@ Newline: ('\r' '\n'? | '\n') -> skip;
 BlockComment: '/*' .*? '*/' -> skip;
 
 LineComment: '//' ~ [\r\n]* -> skip;
+

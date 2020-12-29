@@ -616,6 +616,16 @@ cxAttribute: LeftBracket classHeadName RightBracket;
 
 classKey: Ref? (Class | Struct);
 
+//dp: dpName LeftParen dpParamSeq? RightParen;
+
+//dpParamSeq: dpParam (Comma dpParam);
+
+//dpParam: declSpecifier;
+
+//dpName:
+     //DEPENDENCY_PROPERTY_OWNER
+    //| DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK;
+
 memberDelegateDeclaration:
 	accessSpecifier? Delegate attributeSpecifierSeq? declSpecifierSeq? memberDeclaratorList? Semi;
 
@@ -623,6 +633,7 @@ memberSpecification:
 	(memberdeclaration | accessSpecifier Colon)+;
 
 memberdeclaration:
+     //dp
 	 attributeSpecifierSeq? declSpecifierSeq? memberDeclaratorList? Semi
 	| functionDefinition
 	| memberDelegateDeclaration
