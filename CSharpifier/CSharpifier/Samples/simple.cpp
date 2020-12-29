@@ -4,6 +4,7 @@ delegate void AnDelegate(int c);
 System::IO::File open(string filepath)
 {}
 
+
 [[System::IO]]
 inline int f();
 

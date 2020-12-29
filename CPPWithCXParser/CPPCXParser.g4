@@ -317,8 +317,8 @@ delegateDeclaration:
 	accessSpecifier? Delegate declSpecifierSeq? initDeclaratorList? Semi;
 
 simpleDeclaration:
-	 declSpecifierSeq? initDeclaratorList? Semi
-	| delegateDeclaration
+	 delegateDeclaration
+	| declSpecifierSeq? initDeclaratorList? Semi
 	| attributeSpecifierSeq declSpecifierSeq? initDeclaratorList Semi;
 
 staticAssertDeclaration:
