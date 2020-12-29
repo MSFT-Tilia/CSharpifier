@@ -30,6 +30,21 @@ namespace CSharpifier
             }
         }
 
+        static void TestCaclXaml()
+        {
+            CSharpFile hfile = new CSharpFile();
+            hfile.Parse(@"..\..\..\Samples\.xaml.h");
+
+            CSharpFile cppfile = new CSharpFile();
+            cppfile.Parse(@"..\..\..\Samples\App.xaml.cpp");
+
+            CSFileNode onefile = (new CSFileNodeMeger()).Merge(hfile.RootNode, cppfile.RootNode);
+
+            CSharpGen gen = new CSharpGen();
+            gen.Generate(@"..\..\..\Samples\output\App.xaml.cs", onefile, new CSharpEmitter());
+
+        }
+
         static void TestAppXamlCPP()
         {
             CSharpFile file = new CSharpFile();
