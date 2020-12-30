@@ -68,6 +68,11 @@ namespace CSharpifier
 
         public static bool IsNodeNameEqual(string name1, string name2, bool exactMatch)
         {
+            if (name1 == null || name2 == null)
+            {
+                return false;
+            }
+
             if(exactMatch)
             {
                 return name1 == name2;

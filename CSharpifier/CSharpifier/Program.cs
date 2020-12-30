@@ -43,10 +43,8 @@ namespace CSharpifier
 
             (new CSharpGen()).Generate(@"..\..\..\Samples\output\Calculator.xaml.cpp.cs", hfile.RootNode, new CSharpEmitter());
 
-            //CSFileNode onefile = (new CSFileNodeMeger()).Merge(hfile.RootNode, cppfile.RootNode);
-
-            //CSharpGen gen = new CSharpGen();
-            //gen.Generate(@"..\..\..\Samples\output\App.xaml.cs", onefile, new CSharpEmitter());
+            CSFileNode onefile = (new CSFileNodeMeger()).Merge(hfile.RootNode, cppfile.RootNode);
+            (new CSharpGen()).Generate(@"..\..\..\Samples\output\Calculator.xaml.cs", onefile, new CSharpEmitter());
         }
 
         static void TestAppXamlCPP()
