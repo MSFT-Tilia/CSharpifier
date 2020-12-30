@@ -5997,15 +5997,15 @@ public partial class CPPCXParser : Parser {
 	}
 
 	public partial class SimpleDeclarationContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public DelegateDeclarationContext delegateDeclaration() {
+			return GetRuleContext<DelegateDeclarationContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Semi() { return GetToken(CPPCXParser.Semi, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public DeclSpecifierSeqContext declSpecifierSeq() {
 			return GetRuleContext<DeclSpecifierSeqContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public InitDeclaratorListContext initDeclaratorList() {
 			return GetRuleContext<InitDeclaratorListContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public DelegateDeclarationContext delegateDeclaration() {
-			return GetRuleContext<DelegateDeclarationContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public AttributeSpecifierSeqContext attributeSpecifierSeq() {
 			return GetRuleContext<AttributeSpecifierSeqContext>(0);
@@ -6045,31 +6045,31 @@ public partial class CPPCXParser : Parser {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1029;
-				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,104,Context) ) {
-				case 1:
-					{
-					State = 1028; declSpecifierSeq();
-					}
-					break;
-				}
-				State = 1032;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-				if (_la==Decltype || _la==Operator || ((((_la - 81)) & ~0x3f) == 0 && ((1L << (_la - 81)) & ((1L << (Typeid_ - 81)) | (1L << (LeftParen - 81)) | (1L << (Star - 81)) | (1L << (Caret - 81)) | (1L << (And - 81)) | (1L << (Tilde - 81)) | (1L << (AndAnd - 81)) | (1L << (Doublecolon - 81)) | (1L << (Ellipsis - 81)) | (1L << (Identifier - 81)))) != 0)) {
-					{
-					State = 1031; initDeclaratorList();
-					}
-				}
-
-				State = 1034; Match(Semi);
+				State = 1028; delegateDeclaration();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 1035; delegateDeclaration();
+				State = 1030;
+				ErrorHandler.Sync(this);
+				switch ( Interpreter.AdaptivePredict(TokenStream,104,Context) ) {
+				case 1:
+					{
+					State = 1029; declSpecifierSeq();
+					}
+					break;
+				}
+				State = 1033;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==Decltype || _la==Operator || ((((_la - 81)) & ~0x3f) == 0 && ((1L << (_la - 81)) & ((1L << (Typeid_ - 81)) | (1L << (LeftParen - 81)) | (1L << (Star - 81)) | (1L << (Caret - 81)) | (1L << (And - 81)) | (1L << (Tilde - 81)) | (1L << (AndAnd - 81)) | (1L << (Doublecolon - 81)) | (1L << (Ellipsis - 81)) | (1L << (Identifier - 81)))) != 0)) {
+					{
+					State = 1032; initDeclaratorList();
+					}
+				}
+
+				State = 1035; Match(Semi);
 				}
 				break;
 			case 3:
@@ -16614,8 +16614,8 @@ public partial class CPPCXParser : Parser {
 		'\x41', '\x3', '\x41', '\x3', '\x41', '\x3', '\x42', '\x5', '\x42', '\x3FC', 
 		'\n', '\x42', '\x3', '\x42', '\x3', '\x42', '\x5', '\x42', '\x400', '\n', 
 		'\x42', '\x3', '\x42', '\x5', '\x42', '\x403', '\n', '\x42', '\x3', '\x42', 
-		'\x3', '\x42', '\x3', '\x43', '\x5', '\x43', '\x408', '\n', '\x43', '\x3', 
-		'\x43', '\x5', '\x43', '\x40B', '\n', '\x43', '\x3', '\x43', '\x3', '\x43', 
+		'\x3', '\x42', '\x3', '\x43', '\x3', '\x43', '\x5', '\x43', '\x409', '\n', 
+		'\x43', '\x3', '\x43', '\x5', '\x43', '\x40C', '\n', '\x43', '\x3', '\x43', 
 		'\x3', '\x43', '\x3', '\x43', '\x5', '\x43', '\x411', '\n', '\x43', '\x3', 
 		'\x43', '\x3', '\x43', '\x3', '\x43', '\x5', '\x43', '\x416', '\n', '\x43', 
 		'\x3', '\x44', '\x3', '\x44', '\x3', '\x44', '\x3', '\x44', '\x3', '\x44', 
@@ -17486,19 +17486,19 @@ public partial class CPPCXParser : Parser {
 		'\x401', '\x403', '\x5', '\xDA', 'n', '\x2', '\x402', '\x401', '\x3', 
 		'\x2', '\x2', '\x2', '\x402', '\x403', '\x3', '\x2', '\x2', '\x2', '\x403', 
 		'\x404', '\x3', '\x2', '\x2', '\x2', '\x404', '\x405', '\a', '\x89', '\x2', 
-		'\x2', '\x405', '\x83', '\x3', '\x2', '\x2', '\x2', '\x406', '\x408', 
-		'\x5', '\x8E', 'H', '\x2', '\x407', '\x406', '\x3', '\x2', '\x2', '\x2', 
-		'\x407', '\x408', '\x3', '\x2', '\x2', '\x2', '\x408', '\x40A', '\x3', 
-		'\x2', '\x2', '\x2', '\x409', '\x40B', '\x5', '\xDA', 'n', '\x2', '\x40A', 
-		'\x409', '\x3', '\x2', '\x2', '\x2', '\x40A', '\x40B', '\x3', '\x2', '\x2', 
-		'\x2', '\x40B', '\x40C', '\x3', '\x2', '\x2', '\x2', '\x40C', '\x416', 
-		'\a', '\x89', '\x2', '\x2', '\x40D', '\x416', '\x5', '\x82', '\x42', '\x2', 
+		'\x2', '\x405', '\x83', '\x3', '\x2', '\x2', '\x2', '\x406', '\x416', 
+		'\x5', '\x82', '\x42', '\x2', '\x407', '\x409', '\x5', '\x8E', 'H', '\x2', 
+		'\x408', '\x407', '\x3', '\x2', '\x2', '\x2', '\x408', '\x409', '\x3', 
+		'\x2', '\x2', '\x2', '\x409', '\x40B', '\x3', '\x2', '\x2', '\x2', '\x40A', 
+		'\x40C', '\x5', '\xDA', 'n', '\x2', '\x40B', '\x40A', '\x3', '\x2', '\x2', 
+		'\x2', '\x40B', '\x40C', '\x3', '\x2', '\x2', '\x2', '\x40C', '\x40D', 
+		'\x3', '\x2', '\x2', '\x2', '\x40D', '\x416', '\a', '\x89', '\x2', '\x2', 
 		'\x40E', '\x410', '\x5', '\xC8', '\x65', '\x2', '\x40F', '\x411', '\x5', 
 		'\x8E', 'H', '\x2', '\x410', '\x40F', '\x3', '\x2', '\x2', '\x2', '\x410', 
 		'\x411', '\x3', '\x2', '\x2', '\x2', '\x411', '\x412', '\x3', '\x2', '\x2', 
 		'\x2', '\x412', '\x413', '\x5', '\xDA', 'n', '\x2', '\x413', '\x414', 
 		'\a', '\x89', '\x2', '\x2', '\x414', '\x416', '\x3', '\x2', '\x2', '\x2', 
-		'\x415', '\x407', '\x3', '\x2', '\x2', '\x2', '\x415', '\x40D', '\x3', 
+		'\x415', '\x406', '\x3', '\x2', '\x2', '\x2', '\x415', '\x408', '\x3', 
 		'\x2', '\x2', '\x2', '\x415', '\x40E', '\x3', '\x2', '\x2', '\x2', '\x416', 
 		'\x85', '\x3', '\x2', '\x2', '\x2', '\x417', '\x418', '\a', 'H', '\x2', 
 		'\x2', '\x418', '\x419', '\a', '^', '\x2', '\x2', '\x419', '\x41A', '\x5', 
@@ -18376,7 +18376,7 @@ public partial class CPPCXParser : Parser {
 		'\x358', '\x35B', '\x35E', '\x364', '\x36A', '\x370', '\x377', '\x380', 
 		'\x388', '\x38C', '\x393', '\x395', '\x3A9', '\x3AD', '\x3B3', '\x3B8', 
 		'\x3BC', '\x3BF', '\x3C6', '\x3CD', '\x3D1', '\x3DA', '\x3E5', '\x3EF', 
-		'\x3F4', '\x3FB', '\x3FF', '\x402', '\x407', '\x40A', '\x410', '\x415', 
+		'\x3F4', '\x3FB', '\x3FF', '\x402', '\x408', '\x40B', '\x410', '\x415', 
 		'\x42A', '\x42F', '\x432', '\x43D', '\x443', '\x448', '\x44B', '\x450', 
 		'\x453', '\x456', '\x46C', '\x472', '\x478', '\x47E', '\x481', '\x487', 
 		'\x48B', '\x48F', '\x492', '\x49A', '\x49C', '\x4A2', '\x4A5', '\x4A8', 

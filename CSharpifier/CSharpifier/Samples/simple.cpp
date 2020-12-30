@@ -1,8 +1,9 @@
 
-delegate void AnDelegate(int c);
 
 System::IO::File open(string filepath)
 {}
+
+delegate void AnDelegate(int c);
 
 
 [[System::IO]]
@@ -17,7 +18,7 @@ class AClass
 public:
 	public delegate void OnotherDelegate(int b);
 
-	DEPENDENCY_PROPERTY_OWNER();
+	//DEPENDENCY_PROPERTY_OWNER();
 	//DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsStandard, false);
 	//DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsScientific, false);
 	//DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsProgrammer, false);

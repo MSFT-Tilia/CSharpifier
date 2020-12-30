@@ -304,10 +304,6 @@ fragment Universalcharactername:
 	'\\u' Hexquad
 	| '\\U' Hexquad Hexquad;
 
-/* Dependency Property Keywords */
-//DEPENDENCY_PROPERTY_OWNER : 'DEPENDENCY_PROPERTY_OWNER';
-//DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK: 'DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK';
-
 Identifier:
 	/*
 	 Identifiernondigit | Identifier Identifiernondigit | Identifier DIGIT
